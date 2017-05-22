@@ -9,9 +9,7 @@ I have no idea what I was thinking!
 
 Named after the host of the show `Carrie Anne Philbin`_.
 
-`Martin O'Hanlon`_
-`stuffaboutco`_
-`@martinohanlon`_
+`Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
 
 .. _Martin O'Hanlon: https://github.com/martinohanlon
 .. _stuffaboutco.de: http://stuffaboutco.de
