@@ -12,11 +12,17 @@ The heart of PhilbinSS is a Transistor simulator and the components required to 
 Using these simple components you can create all the key elements of a computer - this is done through levels of abstraction:
 
 * Transistor 
+  
   * Not, And, Or logic gates 
+  
     * Xor Logic Gate 
+  
       * Half Adder
+  
         * Full Adder
+  
           * 8 bit Ripple Carry Adder
+  
             * and so on...  
 
 The project is named after the host of the show `Carrie Anne Philbin`_.
