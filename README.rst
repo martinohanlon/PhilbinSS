@@ -25,9 +25,10 @@ Using these simple components you can create all the key elements of a computer 
   
             * and so on...  
 
+The current highest level of abstraction is ``Full Adder``.
+
 The project is named after the host of the show `Carrie Anne Philbin`_.
 
-The current highest level of abstraction is ``Full Adder``.
 
 Transistor
 ----------
