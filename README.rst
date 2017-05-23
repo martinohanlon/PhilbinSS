@@ -57,7 +57,7 @@ You can create a transistor and connect it up using::
     # the output at the collector will be False
     print(t.collector_output)
     
-By default, power is supplied to the transistor's collector, you can create the transistor unpowered using:: 
+By default, power is supplied to the transistor's collector, you can create an unpowered transistor using:: 
 
     t = Transistor(connect_to_power = False)
 
