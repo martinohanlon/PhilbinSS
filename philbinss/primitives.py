@@ -57,21 +57,5 @@ class Anode(Node):
         super(Anode, self).__init__(value, value_changed)
 
 class Cathode(Node):
-    def __init__(self, value = False, value_changed = None):
-        super(Cathode, self).__init__(value, value_changed)
-
-if __name__ == "__main__":
-    a1 = Anode()
-    a2 = Anode()
-    c1 = Cathode()
-    c2 = Cathode()
-    a1.value = True
-    print(a1)
-    a1.connect(c1)
-    print(c1)
-    c1.connect(c2)
-    print(c2)
-    a1.value = False
-    print(a1)
-    print(c1)
-    print(c2)
+    def __init__(self, value_changed = None):
+        super(Cathode, self).__init__(False, value_changed)
