@@ -114,3 +114,6 @@ The base connections of the transistors are the inputs, the output transistor 1'
 
 .. |andlogicgate| image:: docs/images/and.png
    :alt: and logic gate
+
+
+ * images from `Crash Course Computer Science`_
