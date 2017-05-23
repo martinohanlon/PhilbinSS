@@ -16,7 +16,7 @@ class InputOutputMixin():
         return "{},{}".format(self.inputs, self.output)
         
     def __str__(self):
-        return "inputs = {}, output = {}".format(self.inputs, self.output)
+        return "inputs = {}, outputs = {}".format(self.inputs, self.output)
 
 class OneInputMixin():
     @property
