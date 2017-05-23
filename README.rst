@@ -13,9 +13,9 @@ Using these simple components you can create all the key elements of a computer 
 
 * Transistor 
   
-  * Not, And, Or logic gates 
+  * Not, And, Or 
   
-    * Xor Logic Gate 
+    * Xor  
   
       * Half Adder
   
