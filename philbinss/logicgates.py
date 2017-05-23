@@ -1,95 +1,56 @@
 from components import Transistor, Power, Join, Split
+from mixins import InputOutputMixin, OneInputMixin, TwoInputMixin, OneOutputMixin
 
-class LogicGate(object):
-    def __init__(self, inputs, output):
-        self._inputs = inputs
-        self._output = output
-        
-    @property
-    def output(self):
-        return self._output
-
-    @property
-    def inputs(self):
-        return self._inputs
-
-    def __repr__(self):
-        return "{},{}".format(self.inputs, self.output)
-
-    def __str__(self):
-        return "inputs = {}, output = {}".format(self.inputs, self.output)
-
-
-class OneInputLogicGate(LogicGate):
-    def __init__(self, theinput, output):
-        inputs = [theinput]
-        super(OneInputLogicGate, self).__init__(inputs, output)
-
-    @property
-    def input(self):
-        return self._inputs[0]
-
-class TwoInputLogicGate(LogicGate):
-    def __init__(self, input_a, input_b, output):
-        inputs = [input_a, input_b]
-        super(TwoInputLogicGate, self).__init__(inputs, output)
-
-    @property
-    def input_a(self):
-        return self._inputs[0]
-
-    @property
-    def input_b(self):
-        return self._inputs[1]
-
-class Not(OneInputLogicGate):
+class Not(InputOutputMixin, OneInputMixin, OneOutputMixin):
     def __init__(self):
         t = Transistor()
 
-        theinput = t.base
-        output = t.collector_output
+        inputs = [t.base]
+        outputs = [t.collector_output]
 
-        super(Not, self).__init__(theinput, output)
+        super(Not, self).__init__(inputs, outputs)
 
     def __str__(self):
         return "Not: input = {}, output = {}".format(self.input, self.output)
         
-class And(TwoInputLogicGate):
+class And(InputOutputMixin, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         t1 = Transistor()
         t2 = Transistor(connect_to_power = False)
         
         input_a = t1.base
         input_b = t2.base
+        inputs = [input_a, input_b]
         
         t1.emitter.connect(t2.collector)
         
-        output = t2.emitter
+        outputs = [t2.emitter]
 
-        super(And, self).__init__(input_a, input_b, output)
+        super(And, self).__init__(inputs, outputs)
 
     def __str__(self):
         return "And: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
 
-class Or(TwoInputLogicGate):
+class Or(InputOutputMixin, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         t1 = Transistor()
         t2 = Transistor()
 
         input_a = t1.base
         input_b = t2.base
+        inputs = [input_a, input_b]
 
         #join the 2 transmitter emitters
         join = Join(t1.emitter, t2.emitter)
         
-        output = join.output
+        outputs = [join.output]
         
-        super(Or, self).__init__(input_a, input_b, output)
+        super(Or, self).__init__(inputs, outputs)
 
     def __str__(self):
         return "Or: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
 
-class Xor(TwoInputLogicGate):
+class Xor(InputOutputMixin, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         #create gates
         a1 = And()
@@ -100,6 +61,7 @@ class Xor(TwoInputLogicGate):
         #split input a and b to go to the and1 and or gate 
         input_a = Split(a1.input_a, o.input_a).input
         input_b = Split(a1.input_b, o.input_b).input
+        inputs = [input_a, input_b]
 
         #output of and2 to not
         a1.output.connect(n.input)
@@ -111,9 +73,9 @@ class Xor(TwoInputLogicGate):
         o.output.connect(a2.input_b)
         
         #output is the result of and2
-        output = a2.output
+        outputs = [a2.output]
 
-        super(Xor, self).__init__(input_a, input_b, output)
+        super(Xor, self).__init__(inputs, outputs)
 
     def __str__(self):
         return "Xor: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)

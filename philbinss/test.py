@@ -1,3 +1,4 @@
 import test_primitives
 import test_components
 import test_logicgates
+import test_alu

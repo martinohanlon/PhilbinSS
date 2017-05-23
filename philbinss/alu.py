@@ -1,42 +1,6 @@
 from logicgates import And, Xor
 from components import Split
-
-class InputOutputMixin():
-    def __init__(self, inputs, outputs):
-        self._inputs = inputs
-        self._outputs = outputs
-
-    @property
-    def inputs(self):
-        return self._inputs
-
-    @property
-    def outputs(self):
-        return self._outputs
-
-    def __repr__(self):
-        return "{},{}".format(self.inputs, self.output)
-        
-    def __str__(self):
-        return "inputs = {}, output = {}".format(self.inputs, self.output)
-
-class TwoInputMixin():
-    @property
-    def input_a(self):
-        return self._inputs[0]
-
-    @property
-    def input_b(self):
-        return self._inputs[1]
-
-class SumCarryOuputMixin():
-    @property
-    def sum(self):
-        return self._outputs[0]
-
-    @property
-    def carry(self):
-        return self._outputs[1]
+from mixins import InputOutputMixin, TwoInputMixin, SumCarryOuputMixin
 
 class HalfAdder(InputOutputMixin, TwoInputMixin, SumCarryOuputMixin):
     def __init__(self):
