@@ -13,7 +13,7 @@ Using these simple components you can create all the key elements of a computer 
 
 Named after the host of the show `Carrie Anne Philbin`_.
 
-The current highest level of abstraction is ``Xor`` logic gate.
+The current highest level of abstraction is ``Half adder``.
 
 Transistor
 ----------
@@ -42,7 +42,7 @@ You can create a transistor and connect it up using::
     # the output at the collector will be False
     print(t.collector_output)
     
-By default power is supplied to the transistor's collector, you can create the transistor unpowered using:: 
+By default, power is supplied to the transistor's collector, you can create the transistor unpowered using:: 
 
     t = Transistor(connect_to_power = False)
 
@@ -51,7 +51,7 @@ Using this simple construct you can create the key components of a computer.
 Logic gates
 -----------
 
-An And gate requires 2 Transistors.
+An And gate requires 2 transistors.
 
 |andlogicgate|
 
