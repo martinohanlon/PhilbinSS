@@ -33,7 +33,7 @@ The project is named after the host of the show `Carrie Anne Philbin`_.
 Transistor
 ----------
 
-A transistor has 3 connections (collector, base, emitter), when the collector and base are supplied with power, power is sent to the emitter (output). The transistor has a 2nd output connected to the collector, which will be supplied with power when the collector is powered but the base is not.
+A transistor has 3 connections (collector, base, emitter), when the collector and base are supplied with power, power is sent to the emitter (output). The transistor has a 2nd output connected to the collector, which will be powered when the collector is powered but the base is not.
 
 You can create a transistor and connect it up using::
 
@@ -70,7 +70,7 @@ An And gate requires 2 transistors.
 
 |andlogicgate|
 
-The base connections of the transistors are the inputs, the output transistor 1's emitter is connected to transistor 2's collector and the result is outputted to transistor 2's emitter::
+The base connections of the transistors are the inputs, the output from transistor 1's emitter is connected to transistor 2's collector and the result is the output of transistor 2's emitter::
 
     # create the transistors
     t1 = Transistor()
