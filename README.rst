@@ -9,9 +9,17 @@ I have no idea what I was thinking!
 
 The heart of PhilbinSS is a Transistor simulator and the components required to connect transistors together. These components are the only place where logic is coded, all other functions are created by connecting transistors together. 
 
-Using these simple components you can create all the key elements of a computer - this is done through levels of abstraction, Transistor > Not, And, Or logic gates > Xor Logic Gate > Half Adder > Full Adder > 8 bit ripple carry adder > and so on...  
+Using these simple components you can create all the key elements of a computer - this is done through levels of abstraction:
 
-Named after the host of the show `Carrie Anne Philbin`_.
+* Transistor 
+  * Not, And, Or logic gates 
+    * Xor Logic Gate 
+      * Half Adder
+        * Full Adder
+          * 8 bit Ripple Carry Adder
+            * and so on...  
+
+The project is named after the host of the show `Carrie Anne Philbin`_.
 
 The current highest level of abstraction is ``Half adder``.
 
