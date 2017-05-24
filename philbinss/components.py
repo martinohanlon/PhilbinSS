@@ -1,19 +1,42 @@
 from primitives import Anode, Cathode
+from mixins import OneInputMixin
 
-class Split():
+class Base(object):
+    """
+    The Base of all components it implements the simplest of interfaces, input(s) and output(s)
+    """
+    def __init__(self, inputs, outputs):
+        self._inputs = inputs
+        self._outputs = outputs
+
+    @property
+    def inputs(self):
+        return self._inputs
+
+    @property
+    def outputs(self):
+        return self._outputs
+
+    def __repr__(self):
+        return "{},{}".format(self.inputs, self.output)
+        
+    def __str__(self):
+        return "inputs = {}, outputs = {}".format(self.inputs, self.output)
+
+class Split(Base, OneInputMixin):
     """
     A Split is used to split 1 input into many outputs
     """
     def __init__(self, *outputs):
         #if the input changes, update the outputs
-        self._input = Cathode(value_changed = self._update_state)
-        self._outputs = []
+        theinput = Cathode(value_changed = self._update_state)
+
+        #create the split with zero outputs 
+        super(Split, self).__init__([theinput], [])
+
+        # connect up any outputs
         for output in outputs:
             self.connect(output)
-
-    @property
-    def input(self):
-        return self._input
 
     def connect(self, output):
         #output must be a cathode
@@ -33,7 +56,7 @@ class Split():
 
     @property
     def value(self):
-        return self._input.value
+        return self.input.value
 
     def __repr__(self):
         return str(self.input)
@@ -77,6 +100,9 @@ class Join():
         return "{}".format(self.value)
 
 class Power(Anode):
+    """
+    Power is a an Anode which implements simple ``on()``, ``off()`` methods 
+    """
     def __init__(self, on = False):
         super(Power, self).__init__(value = on)
 
@@ -89,7 +115,7 @@ class Power(Anode):
 class MultiPower(Split):
     """
     A MultiPower is a Split connected up to Anode, it can acceptable multiple connections 
-    and can be turned on and off.
+    and like Power implements ``on()`` and ``off()``.
     """
     def __init__(self, on = False):
         super(MultiPower, self).__init__()
@@ -116,25 +142,44 @@ class MultiPower(Split):
 _MAINPOWER = MultiPower(on = True)
 
 class Transistor():
+    """
+    Transistor is the key component and simulates a single transistor
+    """
     def __init__(self, connect_to_power = True):
-        self.collector = Cathode(value_changed = self._update_state)
-        self.base = Cathode(value_changed = self._update_state)
-        self.emitter = Anode()
+        self._collector = Cathode(value_changed = self._update_state)
+        self._base = Cathode(value_changed = self._update_state)
+        self._emitter = Anode()
 
         #an output from the collector (an inverse of the emitter), used not NOT
-        self.collector_output = Anode()
+        self._collector_output = Anode()
 
         if connect_to_power:
-            _MAINPOWER.connect(self.collector)
+            _MAINPOWER.connect(self._collector)
         
         self._update_state()
 
+    @property
+    def collector(self):
+        return self._collector
+
+    @property
+    def base(self):
+        return self._base
+
+    @property
+    def emitter(self):
+        return self._emitter
+
+    @property
+    def collector_output(self):
+        return self._collector_output
+
     def _update_state(self):
-        self.emitter.value = self.collector.value and self.base.value
-        self.collector_output.value = self.collector.value and (not self.base.value)
+        self._emitter.value = self._collector.value and self._base.value
+        self._collector_output.value = self._collector.value and (not self._base.value)
 
     def __repr__(self):
-        return "{},{},{}".format(self.collector, self.base, self.emitter)
+        return "{},{},{}".format(self._collector, self._base, self._emitter)
 
     def __str__(self):
-        return "collector = {}, base = {}, emitter = {}, collector_output = {}".format(self.collector, self.base, self.emitter, self.collector_output)
+        return "collector = {}, base = {}, emitter = {}, collector_output = {}".format(self._collector, self._base, self._emitter, self._collector_output)
