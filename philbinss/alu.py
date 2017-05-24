@@ -31,7 +31,7 @@ class FullAdder(InputOutputMixin, ThreeInputMixin, SumCarryOuputMixin):
         #create inputs
         input_a = ha1.input_a
         input_b = ha1.input_b
-        input_c = ha2.input_a
+        input_c = ha2.input_b
         inputs = [input_a, input_b, input_c]
 
         #connect ha1 carry to ha2 input_a
@@ -43,7 +43,7 @@ class FullAdder(InputOutputMixin, ThreeInputMixin, SumCarryOuputMixin):
 
         #connect the outputs
         thesum = ha2.sum
-        carry = ha1.carry
+        carry = o.output
         outputs = [thesum, carry]
 
         super(FullAdder, self).__init__(inputs, outputs)

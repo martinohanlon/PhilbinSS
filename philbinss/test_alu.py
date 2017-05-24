@@ -51,9 +51,33 @@ def test_fulladder():
     assert not fa.carry.value
     assert fa.sum.value
 
+    in1.off()
+    in2.off()
+    in3.on()
+    assert not fa.carry.value
+    assert fa.sum.value
+
+    in1.off()
+    in2.on()
+    in3.off()
+    assert not fa.carry.value
+    assert fa.sum.value
+
     in1.on()
     in2.on()
     in3.off()
+    assert fa.carry.value 
+    assert not fa.sum.value 
+
+    in1.off()
+    in2.on()
+    in3.on()
+    assert fa.carry.value 
+    assert not fa.sum.value 
+
+    in1.on()
+    in2.off()
+    in3.on()
     assert fa.carry.value 
     assert not fa.sum.value 
 
