@@ -1,7 +1,7 @@
-from components import Transistor, Power, Join, Split
-from mixins import InputOutputMixin, OneInputMixin, TwoInputMixin, OneOutputMixin
+from components import Base, Transistor, Power, Join, Split
+from mixins import OneInputMixin, TwoInputMixin, OneOutputMixin
 
-class Not(InputOutputMixin, OneInputMixin, OneOutputMixin):
+class Not(Base, OneInputMixin, OneOutputMixin):
     def __init__(self):
         t = Transistor()
 
@@ -13,7 +13,7 @@ class Not(InputOutputMixin, OneInputMixin, OneOutputMixin):
     def __str__(self):
         return "Not: input = {}, output = {}".format(self.input, self.output)
         
-class And(InputOutputMixin, TwoInputMixin, OneOutputMixin):
+class And(Base, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         t1 = Transistor()
         t2 = Transistor(connect_to_power = False)
@@ -31,7 +31,7 @@ class And(InputOutputMixin, TwoInputMixin, OneOutputMixin):
     def __str__(self):
         return "And: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
 
-class Or(InputOutputMixin, TwoInputMixin, OneOutputMixin):
+class Or(Base, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         t1 = Transistor()
         t2 = Transistor()
@@ -50,7 +50,7 @@ class Or(InputOutputMixin, TwoInputMixin, OneOutputMixin):
     def __str__(self):
         return "Or: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
 
-class Xor(InputOutputMixin, TwoInputMixin, OneOutputMixin):
+class Xor(Base, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         #create gates
         a1 = And()

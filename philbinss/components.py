@@ -1,5 +1,5 @@
 from primitives import Anode, Cathode
-from mixins import OneInputMixin
+from mixins import OneInputMixin, OneOutputMixin
 
 class Base(object):
     """
@@ -34,7 +34,7 @@ class Split(Base, OneInputMixin):
         #create the split with zero outputs 
         super(Split, self).__init__([theinput], [])
 
-        # connect up any outputs
+        # connect up the outputs
         for output in outputs:
             self.connect(output)
 
@@ -59,22 +59,25 @@ class Split(Base, OneInputMixin):
         return self.input.value
 
     def __repr__(self):
-        return str(self.input)
+        return "{}".format(self.input)
 
-class Join():
+    def __str__(self):
+        return "Split: {}".format(self.input)
+
+class Join(Base, OneOutputMixin):
     """
     A join is used to bring multiple inputs into 1 output
     """
     def __init__(self, *inputs):
-        self._output = Anode()
-        self._inputs = []
+        output = Anode()
+
+        #create the join with zero inputs 
+        super(Join, self).__init__([], [output])
+
+        #connect the inputs
         for aninput in inputs:
             self.connect(aninput)
     
-    @property
-    def output(self):
-        return self._output
-
     def connect(self, aninput):
         #add the input to the connections
         self._inputs.append(aninput)
@@ -99,6 +102,9 @@ class Join():
     def __repr__(self):
         return "{}".format(self.value)
 
+    def __str__(self):
+        return "Join: {}".format(self.output)
+
 class Power(Anode):
     """
     Power is a an Anode which implements simple ``on()``, ``off()`` methods 
@@ -111,6 +117,9 @@ class Power(Anode):
 
     def off(self):
         self.value = False
+
+    def __str__(self):
+        return "Power: {}".format(self.value)
 
 class MultiPower(Split):
     """
@@ -138,10 +147,13 @@ class MultiPower(Split):
     def off(self):
         self._supply.value = False
 
+    def __str__(self):
+        return "Multipower: {}".format(self.value)
+
 #the mainpower - used to power the transistors
 _MAINPOWER = MultiPower(on = True)
 
-class Transistor():
+class Transistor(Base):
     """
     Transistor is the key component and simulates a single transistor
     """
@@ -155,9 +167,10 @@ class Transistor():
 
         if connect_to_power:
             _MAINPOWER.connect(self._collector)
-        
-        self._update_state()
+            self._update_state()
 
+        super(Transistor, self).__init__([self._collector, self._base], [self._emitter, self._collector_output])
+        
     @property
     def collector(self):
         return self._collector
@@ -179,7 +192,7 @@ class Transistor():
         self._collector_output.value = self._collector.value and (not self._base.value)
 
     def __repr__(self):
-        return "{},{},{}".format(self._collector, self._base, self._emitter)
+        return "{},{},{},{}".format(self._collector, self._base, self._emitter, self._collector_output)
 
     def __str__(self):
-        return "collector = {}, base = {}, emitter = {}, collector_output = {}".format(self._collector, self._base, self._emitter, self._collector_output)
+        return "Transistor: collector = {}, base = {}, emitter = {}, collector_output = {}".format(self._collector, self._base, self._emitter, self._collector_output)

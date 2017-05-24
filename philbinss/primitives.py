@@ -19,13 +19,6 @@ class Node(object):
     def connection(self):
         return self._connection
 
-    @connection.setter
-    def connection(self, value):
-        if value == None:
-            self.disconnect()
-        else:
-            self.connect(value)
-
     def _update_value(self, value):
         if self._value != value:
             self._value = value
@@ -45,9 +38,6 @@ class Node(object):
         #update the connected cathodes value to this nodes value
         self._connection = cathode
         cathode._update_value(self._value)
-
-    def disconnect(self):
-        self._connection = None
 
     def __repr__(self):
         return "{}".format(self.value)

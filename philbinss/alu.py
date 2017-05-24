@@ -1,8 +1,8 @@
 from logicgates import And, Xor, Or
-from components import Split
-from mixins import InputOutputMixin, TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin
+from components import Base, Split
+from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin
 
-class HalfAdder(InputOutputMixin, TwoInputMixin, SumCarryOuputMixin):
+class HalfAdder(Base, TwoInputMixin, SumCarryOuputMixin):
     def __init__(self):
         x = Xor()
         a = And()
@@ -22,7 +22,7 @@ class HalfAdder(InputOutputMixin, TwoInputMixin, SumCarryOuputMixin):
     def __str__(self):
         return "HalfAdder: input_a = {}, input_b = {}, carry = {}, sum = {}".format(self.input_a, self.input_b, self.sum, self.carry)
 
-class FullAdder(InputOutputMixin, ThreeInputMixin, SumCarryOuputMixin):
+class FullAdder(Base, ThreeInputMixin, SumCarryOuputMixin):
     def __init__(self):
         ha1 = HalfAdder()
         ha2 = HalfAdder()

@@ -1,23 +1,3 @@
-
-class InputOutputMixin():
-    def __init__(self, inputs, outputs):
-        self._inputs = inputs
-        self._outputs = outputs
-
-    @property
-    def inputs(self):
-        return self._inputs
-
-    @property
-    def outputs(self):
-        return self._outputs
-
-    def __repr__(self):
-        return "{},{}".format(self.inputs, self.output)
-        
-    def __str__(self):
-        return "inputs = {}, outputs = {}".format(self.inputs, self.output)
-
 class OneInputMixin():
     @property
     def input(self):
