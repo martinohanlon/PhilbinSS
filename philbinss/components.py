@@ -18,10 +18,10 @@ class Base(object):
         return self._outputs
 
     def __repr__(self):
-        return "{},{}".format(self.inputs, self.output)
+        return "{},{}".format(self.inputs, self.outputs)
         
     def __str__(self):
-        return "inputs = {}, outputs = {}".format(self.inputs, self.output)
+        return "inputs = {}, outputs = {}".format(self.inputs, self.outputs)
 
 class Split(Base, OneInputMixin):
     """

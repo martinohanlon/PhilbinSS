@@ -1,6 +1,6 @@
 from logicgates import And, Xor, Or
-from components import Base, Split
-from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin
+from components import Base, Split, Power
+from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin
 
 class HalfAdder(Base, TwoInputMixin, SumCarryOuputMixin):
     def __init__(self):
@@ -50,3 +50,34 @@ class FullAdder(Base, ThreeInputMixin, SumCarryOuputMixin):
 
     def __str__(self):
         return "FullAdder: input_a = {}, input_b = {}, input_c = {}, carry = {}, sum = {}".format(self.input_a, self.input_b, self.input_c, self.sum, self.carry)
+
+class EightBitRippleCarryAdder(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+    def __init__(self):
+        ha = HalfAdder()
+        fa1 = FullAdder()
+        fa2 = FullAdder()
+        fa3 = FullAdder()
+        fa4 = FullAdder()
+        fa5 = FullAdder()
+        fa6 = FullAdder()
+        fa7 = FullAdder()
+        
+        #wire up outputs and inputs
+        input_a = [ha.input_a, fa1.input_b, fa2.input_b, fa3.input_b, fa4.input_b, fa5.input_b, fa6.input_b, fa7.input_b]
+        input_b = [ha.input_b, fa1.input_c, fa2.input_c, fa3.input_c, fa4.input_c, fa5.input_c, fa6.input_c, fa7.input_c]
+        inputs = [input_a, input_b]
+
+        output_sum = [ha.sum, fa1.sum, fa2.sum, fa3.sum, fa4.sum, fa5.sum, fa6.sum, fa7.sum]
+        output_carry = fa7.carry
+        outputs = [output_sum, output_carry]
+
+        #connect up adders
+        ha.carry.connect(fa1.input_a)
+        fa1.carry.connect(fa2.input_a)
+        fa2.carry.connect(fa3.input_a)
+        fa3.carry.connect(fa4.input_a)
+        fa4.carry.connect(fa5.input_a)
+        fa5.carry.connect(fa6.input_a)
+        fa6.carry.connect(fa7.input_a)
+
+        super(EightBitRippleCarryAdder, self).__init__(inputs, outputs)
