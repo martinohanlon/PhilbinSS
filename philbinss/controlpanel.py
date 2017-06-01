@@ -35,7 +35,9 @@ class ControlPanel():
 
         #setup the outputs
         for o in range(len(self.component.outputs)):
-            self.output_checks.append(CheckBox(self.box_outputs, text = "output {}".format(o), grid=[o,2]))
+            output_check = CheckBox(self.box_outputs, text = "output {}".format(o), grid=[o,2])
+            output_check.configure(state = "disabled")
+            self.output_checks.append(output_check)
 
         self.update_values()
 
