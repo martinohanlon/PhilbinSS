@@ -2,6 +2,9 @@ from components import Base, Transistor, Power, Join, Split
 from mixins import OneInputMixin, TwoInputMixin, OneOutputMixin
 
 class Not(Base, OneInputMixin, OneOutputMixin):
+    """
+    The implementation of a Not gate, it accepts a single input and has a single output 
+    """
     def __init__(self):
         t = Transistor()
 
@@ -14,6 +17,9 @@ class Not(Base, OneInputMixin, OneOutputMixin):
         return "Not: input = {}, output = {}".format(self.input, self.output)
         
 class And(Base, TwoInputMixin, OneOutputMixin):
+    """
+    The implementation of an And gate, it accepts a two inputs and has a single output 
+    """
     def __init__(self):
         t1 = Transistor()
         t2 = Transistor(connect_to_power = False)
@@ -32,6 +38,9 @@ class And(Base, TwoInputMixin, OneOutputMixin):
         return "And: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
 
 class Or(Base, TwoInputMixin, OneOutputMixin):
+    """
+    The implementation of an Or gate, it accepts a two inputs and has a single output 
+    """
     def __init__(self):
         t1 = Transistor()
         t2 = Transistor()
@@ -51,6 +60,9 @@ class Or(Base, TwoInputMixin, OneOutputMixin):
         return "Or: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
 
 class Xor(Base, TwoInputMixin, OneOutputMixin):
+    """
+    The implementation of an Xor gate, it accepts a two inputs and has a single output 
+    """
     def __init__(self):
         #create gates
         a1 = And()

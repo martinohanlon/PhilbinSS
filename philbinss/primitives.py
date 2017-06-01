@@ -1,4 +1,9 @@
 class Node(object):
+    """
+    A node is the lowest level component and represents a single binary state. 
+    
+    A node can be connected to another node, when its value changes so does the value of its connected node.
+    """
     def __init__(self, value, value_changed):
         self._value_changed = value_changed
         self._value = value
@@ -43,9 +48,20 @@ class Node(object):
         return "{}".format(self.value)
 
 class Anode(Node):
+    """
+    An Anode is a type of node which emits a value (like an Anode which emits electrons!). 
+    
+    An Anode cannot be connected to, but an anode can connect to other nodes. 
+    """
+
     def __init__(self, value = False, value_changed = None):
         super(Anode, self).__init__(value, value_changed)
 
 class Cathode(Node):
+    """
+    A Cathode is a type of node which receives a value (like a Cathode which received electrons!).abs
+
+    A Cathode's value cannot be changed directly, it can only be changed by a node which connects to it.
+    """
     def __init__(self, value_changed = None):
         super(Cathode, self).__init__(False, value_changed)

@@ -104,6 +104,7 @@ def test_eightbitripplecarryadder():
         inputs_a.append(input_a_bit)
         inputs_b.append(input_b_bit)
 
+    #do some random tests
     no_tests = 50
     for i in range (no_tests):
         #turn on random bits

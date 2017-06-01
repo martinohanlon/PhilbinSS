@@ -39,10 +39,6 @@ class Split(Base, OneInputMixin):
             self.connect(output)
 
     def connect(self, output):
-        #output must be a cathode
-        if isinstance(output, Anode):
-            raise TypeError("cannot output to a Anode")
-        
         #create an anode which will connect to the output
         anode = Anode()
         anode.connect(output)
