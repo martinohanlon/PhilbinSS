@@ -25,6 +25,23 @@ class ThreeInputMixin(object):
     def input_c(self):
         return self._inputs[2]
 
+class FourInputMixin(object):
+    @property
+    def input_a(self):
+        return self._inputs[0]
+
+    @property
+    def input_b(self):
+        return self._inputs[1]
+
+    @property
+    def input_c(self):
+        return self._inputs[2]
+
+    @property
+    def input_d(self):
+        return self._inputs[3]
+
 class OneOutputMixin(object):
     @property
     def output(self):
