@@ -1,4 +1,4 @@
-from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder
+from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder, EightBitRippleCarryAdderSubtractor
 from components import Power
 from random import randint
 
@@ -125,10 +125,68 @@ def test_eightbitripplecarryadder():
         if not rca.carry.value:
             assert rca.input_a.int_value + rca.input_b.int_value == rca.sum.int_value
 
+def test_eightbitripplecarryaddersubtractor():
+    rcas = EightBitRippleCarryAdderSubtractor()
+
+    #create input power switches and connect up ripple carry adder
+    inputs_a = []
+    inputs_b = []
+    
+    for i in range(8):
+        input_a_bit = Power()
+        input_b_bit = Power()
+    
+        input_a_bit.connect(rcas.input_a.get_bit(i))
+        input_b_bit.connect(rcas.input_b.get_bit(i))
+        
+        inputs_a.append(input_a_bit)
+        inputs_b.append(input_b_bit)
+
+    op = Power()
+    op.connect(rcas.operator)
+
+    #do some random tests
+    no_tests = 100
+    for i in range (no_tests):
+        #turn on random bits
+        for in_bit in inputs_a:
+            in_bit.off()
+            if randint(0,2) == 2:
+                in_bit.on()
+        
+        for in_bit in inputs_b:
+            in_bit.off()
+            if randint(0,2) == 2:
+                in_bit.on()
+
+        #random op
+        op.off()
+        if randint(0,1) == 1:
+            op.on()
+
+        #subtract
+        if op.value:
+            #if no overflow did it calculate correctly 
+            if rcas.carry.value:
+                assert rcas.input_a.int_value - rcas.input_b.int_value == rcas.sum.int_value
+            #was there an overflow? if so was the result less than 0
+            if not rcas.carry.value:
+                assert rcas.input_a.int_value - rcas.input_b.int_value < 0
+
+        #addition
+        else:
+            #was there an overflow? if so was the result over 255
+            if rcas.carry.value:
+                assert rcas.input_a.int_value + rcas.input_b.int_value > 255
+            #if no overflow did it calculate correctly 
+            if not rcas.carry.value:
+                assert rcas.input_a.int_value + rcas.input_b.int_value == rcas.sum.int_value
+
 def run_tests():
     test_halfadder()
     test_fulladder()
     test_eightbitripplecarryadder()
+    test_eightbitripplecarryaddersubtractor()
 
     print("alu - all tests run")
 
