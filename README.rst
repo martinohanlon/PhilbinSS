@@ -1,9 +1,10 @@
+=========================
 Philbin Silicon Simulator
 =========================
 
 A work in progress...  
 
-After watching `Crash Course Computer Science`_ I decided a wanted to make my own computer, after realising it would require a lot of transistors that I didn't have, I thought "hey, if I could code one transistor, I could use it many times".  
+After watching `Crash Course Computer Science`_ I decided I wanted to make my own computer, after realising it would require a lot of transistors that I didn't have, I thought "hey, if I could code one transistor, I could use it many times".  
 
 I have no idea what I was thinking!
 
@@ -29,9 +30,8 @@ The current highest level of abstraction is ``8 bit ripple carry adder subtracto
 
 The project is named after the host of the show `Carrie Anne Philbin`_.
 
-
 Transistor
-----------
+==========
 
 A transistor has 3 connections (collector, base, emitter), when the collector and base are supplied with power, power is sent to the emitter (output). The transistor has a 2nd output connected to the collector, which will be powered when the collector is powered but the base is not.
 
@@ -64,13 +64,14 @@ By default, power is supplied to the transistor's collector, you can create an u
 Using this simple construct you can create the key components of a computer.
 
 Logic gates
------------
+===========
 
-An And gate requires 2 transistors.
+And
+---
 
 |andlogicgate|
 
-The base connections of the transistors are the inputs, the output from transistor 1's emitter is connected to transistor 2's collector and the result is the output of transistor 2's emitter::
+An And gate is created using 2 transistors, the base connections are the inputs, the output from transistor 1's emitter is connected to transistor 2's collector and the result is the output of transistor 2's emitter::
 
     # create the transistors
     t1 = Transistor()
@@ -105,6 +106,48 @@ The base connections of the transistors are the inputs, the output from transist
     input_b.on()
     print(output)
 
+Or
+---
+
+|orlogicgate|
+
+An Or gate is created by connecting 2 transistors in parallel, the base connections are the inputs, the output is the obtained by joining the emitters::
+
+    # create the transistors
+    t1 = Transistor()
+    t2 = Transistor()
+
+    # create the power switches 
+    input_a = Power()
+    input_b = Power()
+
+    # connect the inputs 
+    input_a.connect(t1.base)
+    input_b.connect(t2.base)
+
+    # the output is the join of the 2 emitters.
+    output = Join(t1.emitter, t2.emitter).output
+
+    # both inputs are off, the output is False
+    input_a.off()
+    input_b.off()
+    print(output)
+
+    # input a is on, input b is off, the output is True
+    input_a.on()
+    input_b.off()
+    print(output)
+
+    # input a is off, input b is on, the output is True
+    input_a.off()
+    input_b.on()
+    print(output)
+
+    # both inputs are on, the output is True
+    input_a.on()
+    input_b.on()
+    print(output)
+
 `Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
 
  * images from `Crash Course Computer Science`_
@@ -117,3 +160,6 @@ The base connections of the transistors are the inputs, the output from transist
 
 .. |andlogicgate| image:: docs/images/and.png
    :alt: and logic gate
+
+.. |orlogicgate| image:: docs/images/or.png
+   :alt: or logic gate
