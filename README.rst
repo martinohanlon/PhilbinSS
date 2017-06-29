@@ -69,9 +69,11 @@ Logic gates
 And
 ---
 
+An And gate is created using 2 transistors, the base connections are the inputs, the output from transistor 1's emitter is connected to transistor 2's collector and the result is the output of transistor 2's emitter:
+
 |andlogicgate|
 
-An And gate is created using 2 transistors, the base connections are the inputs, the output from transistor 1's emitter is connected to transistor 2's collector and the result is the output of transistor 2's emitter::
+::
 
     # create the transistors
     t1 = Transistor()
@@ -109,9 +111,11 @@ An And gate is created using 2 transistors, the base connections are the inputs,
 Or
 ---
 
+An Or gate is created by connecting 2 transistors in parallel, the base connections are the inputs, the output is the obtained by joining the emitters:
+
 |orlogicgate|
 
-An Or gate is created by connecting 2 transistors in parallel, the base connections are the inputs, the output is the obtained by joining the emitters::
+::
 
     # create the transistors
     t1 = Transistor()
@@ -148,6 +152,37 @@ An Or gate is created by connecting 2 transistors in parallel, the base connecti
     input_b.on()
     print(output)
 
+Not 
+---
+
+A not gate is made using a single transistor, the input is connected to the base, the output is connected to the collector:
+
+|notlogicgate|
+
+::
+
+    # create the transistor
+    t = Transistor()
+
+    # create the power switch
+    theinput = Power()
+
+    # connect the input
+    theinput.connect(t.base)
+
+    # create a varibale for the output
+    output = t.collector_output
+
+    # input is off, the output is True
+    theinput.off()
+    print(output)
+
+    # input is on, the output is False
+    theinput.on()
+    print(output)
+
+
+
 `Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
 
  * images from `Crash Course Computer Science`_
@@ -163,3 +198,6 @@ An Or gate is created by connecting 2 transistors in parallel, the base connecti
 
 .. |orlogicgate| image:: docs/images/or.png
    :alt: or logic gate
+
+.. |notlogicgate| image:: docs/images/not.png
+   :alt: not logic gate
