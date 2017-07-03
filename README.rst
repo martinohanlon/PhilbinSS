@@ -30,8 +30,13 @@ The current highest level of abstraction is ``8 bit ripple carry adder subtracto
 
 The project is named after the host of the show `Carrie Anne Philbin`_.
 
-Transistor
+Components
 ==========
+
+Using 3 simple components ``Transistor``, ``Split`` and ``Join`` you can create a computer.
+
+Transistor
+----------
 
 A transistor has 3 connections (collector, base, emitter), when the collector and base are supplied with power, power is sent to the emitter (output). The transistor has a 2nd output connected to the collector, which will be powered when the collector is powered but the base is not.
 
@@ -61,10 +66,67 @@ By default, power is supplied to the transistor's collector, you can create an u
 
     t = Transistor(connect_to_power = False)
 
-Using this simple construct you can create the key components of a computer.
+Split
+-----
+
+If you need to split an input to multiple nodes you can use a Split::
+
+    # create transistors and a power
+    t1 = Transistor()
+    t2 = Transistor()
+    p = Power()
+
+    # create a split to both transistor bases 
+    input_split = Split(t1.base, t2.base)
+
+    # connect up the power to split (and both transistor bases)
+    p.connect(input_split.input)
+
+    # both transistors are off
+    print(t1.emitter)
+    print(t2.emitter)
+
+    # turn the power on
+    p.on()
+
+    # both transistors are on
+    print(t1.emitter)
+    print(t2.emitter)
+
+Join
+----
+
+If you need to join many inputs to one output you can use a Join::
+
+    # create 2 switches and a transistor
+    p1 = Power()
+    p2 = Power()
+    t = Transistor()
+
+    # join the 2 outputs
+    output_join = Join(p1, p2)
+
+    # connect the output of te join to the transistor
+    output_join.output.connect(t.base)
+
+    # both powers are off, transistor is off
+    p1.off()
+    p2.off()
+    print(t.emitter)
+
+    # either power will turn on the emitter because they are joined
+    p1.on()
+    p2.off()
+    print(t.emitter)
+
+    p1.off()
+    p2.on()
+    print(t.emitter)
 
 Logic gates
 ===========
+
+The 4 logic gates, ``And``, ``Or``, ``Not`` and ``Xor`` are the base logic gates needed.
 
 And
 ---
@@ -181,7 +243,63 @@ A not gate is made using a single transistor, the input is connected to the base
     theinput.on()
     print(output)
 
+Xor
+---
 
+An Xor gate is create by connecting And, Or and Not gates together.
+
+|xorlogicgate|
+
+::
+
+    # create swtiches
+    p1 = Power()
+    p2 = Power()
+
+    # create gates
+    a1 = And()
+    o = Or()
+    n = Not()
+    a2 = And()
+
+    # split input a and b to go to the and1 and or gate 
+    input_a = Split(a1.input_a, o.input_a).input
+    input_b = Split(a1.input_b, o.input_b).input
+
+    # connect the switches
+    p1.connect(input_a)
+    p2.connect(input_b)
+
+    # output of and2 to not
+    a1.output.connect(n.input)
+    
+    # output of not to and2
+    n.output.connect(a2.input_a)
+    
+    # output of or to and2
+    o.output.connect(a2.input_b)
+    
+    # output is the result of and2
+    output = a2.output
+
+    # both switches is off, the output is off
+    p1.off()
+    p2.off()
+    print(output)
+
+    # either switches is on, the output is on
+    p1.off()
+    p2.on()
+    print(output)
+
+    p1.on()
+    p2.off()
+    print(output)
+
+    # both switches are on, the output is off
+    p1.on()
+    p2.on()
+    print(output)
 
 `Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
 
@@ -201,3 +319,6 @@ A not gate is made using a single transistor, the input is connected to the base
 
 .. |notlogicgate| image:: docs/images/not.png
    :alt: not logic gate
+
+.. |xorlogicgate| image:: docs/images/xor.png
+   :alt: xor logic gate

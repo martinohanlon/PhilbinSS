@@ -157,6 +157,11 @@ class TwoEightBitInputMixin(object):
     def input_b(self):
         return EightBit(self._inputs[1])
 
+class OneEightBitOutputMixin(object):
+    @property
+    def sum(self):
+        return EightBit(self._outputs[0])
+
 class OneEightBitSumOneCarryOutputMixin(object):
     @property
     def sum(self):

@@ -91,4 +91,3 @@ class Xor(Base, TwoInputMixin, OneOutputMixin):
 
     def __str__(self):
         return "Xor: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
-
