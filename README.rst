@@ -42,6 +42,8 @@ A transistor has 3 connections (collector, base, emitter), when the collector an
 
 You can create a transistor and connect it up using::
 
+    from components import Transistor, Power
+    
     # create the transistor and a power switch
     t = Transistor()
     p = Power()
@@ -71,6 +73,8 @@ Split
 
 If you need to split an input to multiple nodes you can use a Split::
 
+    from components import Transistor, Power, Split
+    
     # create transistors and a power
     t1 = Transistor()
     t2 = Transistor()
@@ -97,6 +101,8 @@ Join
 ----
 
 If you need to join many inputs to one output you can use a Join::
+
+    from components import Transistor, Power, Join
 
     # create 2 switches and a transistor
     p1 = Power()
@@ -136,6 +142,8 @@ An And gate is created using 2 transistors, the base connections are the inputs,
 |andlogicgate|
 
 ::
+
+    from components import Transistor, Power
 
     # create the transistors
     t1 = Transistor()
@@ -178,6 +186,8 @@ An Or gate is created by connecting 2 transistors in parallel, the base connecti
 |orlogicgate|
 
 ::
+
+    from components import Transistor, Power, Join
 
     # create the transistors
     t1 = Transistor()
@@ -223,6 +233,8 @@ A not gate is made using a single transistor, the input is connected to the base
 
 ::
 
+    from components import Transistor, Power
+
     # create the transistor
     t = Transistor()
 
@@ -252,6 +264,9 @@ An Xor gate is create by connecting And, Or and Not gates together.
 
 ::
 
+    from components import Power, Split
+    from logicgates import And, Or, Not
+    
     # create swtiches
     p1 = Power()
     p2 = Power()
