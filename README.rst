@@ -2,6 +2,8 @@
 Philbin Silicon Simulator
 =========================
 
+*"A virtual computer built from conceptual hardware created using software running on a real computer"*
+
 A work in progress...  
 
 After watching `Crash Course Computer Science`_ I decided I wanted to make my own computer, after realising it would require a lot of transistors that I didn't have, I thought "hey, if I could code one transistor, I could use it many times".  
