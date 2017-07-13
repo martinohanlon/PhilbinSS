@@ -42,6 +42,15 @@ class FourInputMixin(object):
     def input_d(self):
         return self._inputs[3]
 
+class SetResetInputMixin(object):
+    @property
+    def set(self):
+        return self._inputs[0]
+
+    @property
+    def reset(self):
+        return self._inputs[1]
+
 class OneOutputMixin(object):
     @property
     def output(self):
