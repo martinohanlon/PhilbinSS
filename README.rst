@@ -299,12 +299,12 @@ An Xor gate is create by connecting And, Or and Not gates together.
     # output is the result of and2
     output = a2.output
 
-    # both switches is off, the output is off
+    # both inputs are off, the output is off
     p1.off()
     p2.off()
     print(output)
 
-    # either switches is on, the output is on
+    # either input is on, the output is on
     p1.off()
     p2.on()
     print(output)
@@ -313,7 +313,7 @@ An Xor gate is create by connecting And, Or and Not gates together.
     p2.off()
     print(output)
 
-    # both switches are on, the output is off
+    # both inputs are on, the output is off
     p1.on()
     p2.on()
     print(output)
