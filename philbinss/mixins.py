@@ -51,6 +51,15 @@ class SetResetInputMixin(object):
     def reset(self):
         return self._inputs[1]
 
+class DataWriteInputMixin(object):
+    @property
+    def data(self):
+        return self._inputs[0]
+
+    @property
+    def write(self):
+        return self._inputs[1]
+
 class OneOutputMixin(object):
     @property
     def output(self):
@@ -141,6 +150,16 @@ class EightBit(object):
     def bit7(self, value):
         self._bits[7] = value
 
+    def get_binary(self):
+        binary_value = ""
+        for bit in self._bits:
+            binary_value += "1" if bit.value else "0"
+        return binary_value
+
+    @property
+    def binary_value(self):
+        return self.get_binary()
+
     def get_int(self):
         #there must be a better way of converting binary to int
         multiplier = 1
@@ -154,8 +173,22 @@ class EightBit(object):
 
     @property
     def int_value(self):
+        """
+        Returns the integer value of the bits - useful for testing
+        """
         return self.get_int()
 
+    def __str__(self):
+        return "8 bit(binary = {}, int = {})".format(self.binary_value, self.int_value)
+
+class OneEightBitDataOneWriteInputMixin(object):
+    @property
+    def data(self):
+        return EightBit(self._inputs[0])
+
+    @property
+    def write(self):
+        return self._inputs[1]
 
 class TwoEightBitInputMixin(object):
     @property
@@ -168,7 +201,7 @@ class TwoEightBitInputMixin(object):
 
 class OneEightBitOutputMixin(object):
     @property
-    def sum(self):
+    def output(self):
         return EightBit(self._outputs[0])
 
 class OneEightBitSumOneCarryOutputMixin(object):
