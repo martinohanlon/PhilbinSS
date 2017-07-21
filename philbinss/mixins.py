@@ -87,6 +87,10 @@ class EightBit(object):
         return self._bits[bit]
 
     @property
+    def bits(self):
+        return self._bits
+
+    @property
     def bit0(self):
         return self._bits[0]
 

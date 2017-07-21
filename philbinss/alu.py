@@ -1,6 +1,7 @@
 from logicgates import And, Xor, Or
 from components import Base, Split, Power
-from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin
+from primitives import Cathode
+from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin, OneEightBitOutputMixin
 
 class HalfAdder(Base, TwoInputMixin, SumCarryOuputMixin):
     def __init__(self):
@@ -139,3 +140,75 @@ class EightBitRippleCarryAdderSubtractor(Base, TwoEightBitInputMixin, OneEightBi
     @property
     def operator(self):
         return self.inputs[2]
+
+class ALU(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+    def __init__(self):
+        """
+        Truth table for overflow
+
+        op carry overflow
+        1  1     0
+        1  0     1
+        0  0     0
+        0  1     1
+
+        Truth table for negative
+
+        op overflow negative
+        1  1        1
+        1  0        0
+        0  1        0
+        0  0        0
+        """
+        rcas = EightBitRippleCarryAdderSubtractor()
+        overflow_xor = Xor()
+        neg_and = And()
+        
+        #op input
+        #send the op code to the rcas, the overflow xor and the negative and
+        op_split = Split(rcas.operator, overflow_xor.input_a, neg_and.input_a)
+        op = op_split.input
+        
+        inputs = [rcas.input_a.bits, rcas.input_b.bits, op]
+
+        #carry output
+        #send the rcas carry to the carry output and the overflow xor
+        carry = Cathode()  
+        carry_split = Split(carry, overflow_xor.input_b)
+        rcas.carry.connect(carry_split.input)
+
+        #overflow output
+        #send the overflow to the overflow output and the negative And
+        overflow = Cathode()
+        overflow_split = Split(overflow, neg_and.input_b)
+        overflow_xor.output.connect(overflow_split.input)
+        
+        #negative output
+        negative = neg_and.output
+
+        outputs = [rcas.sum.bits, rcas.carry, overflow, negative]
+
+        super(ALU, self).__init__(inputs, outputs)
+
+
+    #inputs
+    @property
+    def operator(self):
+        """
+        '0' - addition
+        '1' - subtraction
+        """
+        return self.inputs[2]
+    
+    #output flags    
+    @property
+    def overflow(self):
+        return self.outputs[2]
+
+    @property
+    def negative(self):
+        """
+        '0' - positive
+        '1' - negative
+        """
+        return self.outputs[3]
