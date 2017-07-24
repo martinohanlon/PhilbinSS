@@ -1,5 +1,5 @@
 from primitives import Cathode
-from components import Base, Split
+from components import Base, Split, Transistor
 from logicgates import Or, Not, And
 from mixins import SetResetInputMixin, DataWriteInputMixin, OneOutputMixin, OneEightBitDataOneWriteInputMixin, OneEightBitOutputMixin
 
@@ -73,9 +73,65 @@ class GatedLatch(Base, DataWriteInputMixin, OneOutputMixin):
     def __str__(self):
         return "Gated Latch: data = {}, write = {}, output = {}".format(self.data, self.write, self.output)
 
-class SelectableGatedLatch(Base):
+class RAMCell(Base):
     def __init__(self):
-        pass
+        a1 = And()
+        a2 = And()
+        a3 = And()
+        t = Transistor(connect_to_power = False)
+        gl = GatedLatch()
+
+        #wire up row and col selector
+        row = a1.input_a
+        col = a1.input_b
+        a1_split = Split(a2.input_b, a3.input_a)
+        a1.output.connect(a1_split.input)
+
+        #write / read enable inputs
+        write_enable = a2.input_a
+        read_enable = a3.input_b
+
+        #wire up gated latch inputs
+        a2.output.connect(gl.write)
+        data_in = gl.data
+
+        inputs = [row, col, write_enable, read_enable, data_in]
+
+        #wire up the data out transistor
+        gl.output.connect(t.collector)
+        a3.output.connect(t.base)
+        data_out = t.emitter
+
+        outputs = [data_out]
+
+        super(RAMCell, self).__init__(inputs, outputs)
+
+    @property
+    def row(self):
+        return self.inputs[0]
+
+    @property
+    def col(self):
+        return self.inputs[1]
+
+    @property
+    def write_enable(self):
+        return self.inputs[2]
+
+    @property
+    def read_enable(self):
+        return self.inputs[3]
+
+    @property
+    def data_in(self):
+        return self.inputs[4]
+
+    @property
+    def data_out(self):
+        return self.outputs[0]
+
+    def __str__(self):
+        return "RAM Cell: row = {}, col = {}, write_enable = {}, read_enable = {}, data_in = {}, data_out = {}".format(self.col, self.row, self.write_enable, self.read_enable, self.data_in, self.data_out)
 
 class EightBitRegister(Base, OneEightBitDataOneWriteInputMixin, OneEightBitOutputMixin):
     def __init__(self):

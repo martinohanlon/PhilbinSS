@@ -44,7 +44,7 @@ class Node(object):
         self._connection = cathode
         cathode._update_value(self._value)
 
-    def __repr__(self):
+    def __str__(self):
         return "{}".format(self.value)
 
 class Anode(Node):
@@ -53,7 +53,6 @@ class Anode(Node):
     
     An Anode cannot be connected to, but an anode can connect to other nodes. 
     """
-
     def __init__(self, value = False, value_changed = None):
         super(Anode, self).__init__(value, value_changed)
 

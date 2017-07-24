@@ -17,9 +17,6 @@ class Base(object):
     def outputs(self):
         return self._outputs
 
-    def __repr__(self):
-        return "{},{}".format(self.inputs, self.outputs)
-        
     def __str__(self):
         return "inputs = {}, outputs = {}".format(self.inputs, self.outputs)
 
@@ -53,9 +50,6 @@ class Split(Base, OneInputMixin):
     @property
     def value(self):
         return self.input.value
-
-    def __repr__(self):
-        return "{}".format(self.input)
 
     def __str__(self):
         return "Split: {}".format(self.input)
@@ -94,9 +88,6 @@ class Join(Base, OneOutputMixin):
             if aninput.value:
                 return True
         return False
-
-    def __repr__(self):
-        return "{}".format(self.value)
 
     def __str__(self):
         return "Join: {}".format(self.output)
@@ -186,9 +177,6 @@ class Transistor(Base):
     def _update_state(self):
         self._emitter.value = self._collector.value and self._base.value
         self._collector_output.value = self._collector.value and (not self._base.value)
-
-    def __repr__(self):
-        return "{},{},{},{}".format(self._collector, self._base, self._emitter, self._collector_output)
 
     def __str__(self):
         return "Transistor: collector = {}, base = {}, emitter = {}, collector_output = {}".format(self._collector, self._base, self._emitter, self._collector_output)

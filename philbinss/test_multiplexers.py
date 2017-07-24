@@ -1,5 +1,5 @@
 from components import Power
-from multiplexers import TwoToOneMultiplexer, FourToOneMultiplexer
+from multiplexers import TwoToOneMultiplexer, FourToOneMultiplexer, TwoToFourDecoder
 
 def test_twotoonemultiplexer():
     mp = TwoToOneMultiplexer()
@@ -79,10 +79,43 @@ def test_fourtoonemultiplexer():
     in3.off()
     assert not mp.output.value
 
+def test_twotofourdecoder():
+    dc = TwoToFourDecoder()
 
+    in1 = Power()
+    in2 = Power()
+
+    in1.connect(dc.input_a)
+    in2.connect(dc.input_b)
+    assert dc.output_a.value
+    assert not dc.output_b.value
+    assert not dc.output_c.value
+    assert not dc.output_d.value
+
+    in1.on()
+    assert not dc.output_a.value
+    assert dc.output_b.value
+    assert not dc.output_c.value
+    assert not dc.output_d.value
+
+    in1.off()
+    in2.on()
+    assert not dc.output_a.value
+    assert not dc.output_b.value
+    assert dc.output_c.value
+    assert not dc.output_d.value
+
+    in1.on()
+    in2.on()
+    assert not dc.output_a.value
+    assert not dc.output_b.value
+    assert not dc.output_c.value
+    assert dc.output_d.value
+    
 def run_tests():
     test_twotoonemultiplexer()
     test_fourtoonemultiplexer()
+    test_twotofourdecoder()
 
 run_tests()
 print("multiplexers - all tests run")

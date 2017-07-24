@@ -68,17 +68,37 @@ class FourToOneMultiplexer(Base, FourInputMixin, OneOutputMixin):
     def __str__(self):
         return "Four To One Multiplexer: input_a = {}, input_b = {}, input_c = {}, input_d = {}, signal_a = {}, signal_b = {} output = {}".format(self.input_a, self.input_b, self.input_c, self.input_d, self.signal_a ,self.signal_b, self.output)
 
-class TwoToFourDecorder(Base, TwoInputMixin, FourOutputMixin):
-    n1 = Not()
-    n2 = Not()
-    a1 = And()
-    a2 = And()
-    a3 = And()
-    a4 = And()
+class TwoToFourDecoder(Base, TwoInputMixin, FourOutputMixin):
+    def __init__(self):
+        n1 = Not()
+        n2 = Not()
+        a1 = And()
+        a2 = And()
+        a3 = And()
+        a4 = And()
 
-    a_split = Split(n1.input, a2.input_a, a4.input_b)
-    input_a = a_split.input
+        a_split = Split(n1.input, a2.input_a, a4.input_b)
+        input_a = a_split.input
 
-    b_split = Split(n2.input, a3.input_a, a4.input_a)
-    input_b = b_split.input
+        b_split = Split(n2.input, a3.input_a, a4.input_a)
+        input_b = b_split.input
 
+        inputs = [input_a, input_b]
+
+        n1_split = Split(a1.input_a, a3.input_b)
+        n1.output.connect(n1_split.input)
+
+        n2_split = Split(a1.input_b, a2.input_b)
+        n2.output.connect(n2_split.input)
+
+        output_a = a1.output
+        output_b = a2.output
+        output_c = a3.output
+        output_d = a4.output
+
+        outputs = [output_a, output_b, output_c, output_d]
+
+        super(TwoToFourDecoder, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "Two To Four Decoder: input_a = {}, input_b = {}, output_a = {}, output_b = {}, output_c = {}, output_d = {}".format(self.input_a, self.input_b, self.output_a, self.output_b, self.output_c, self.output_d)
