@@ -73,6 +73,10 @@ class GatedLatch(Base, DataWriteInputMixin, OneOutputMixin):
     def __str__(self):
         return "Gated Latch: data = {}, write = {}, output = {}".format(self.data, self.write, self.output)
 
+class SelectableGatedLatch(Base):
+    def __init__(self):
+        pass
+
 class EightBitRegister(Base, OneEightBitDataOneWriteInputMixin, OneEightBitOutputMixin):
     def __init__(self):
         gl0 = GatedLatch()

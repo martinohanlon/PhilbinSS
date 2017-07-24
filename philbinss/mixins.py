@@ -65,6 +65,23 @@ class OneOutputMixin(object):
     def output(self):
         return self._outputs[0]
 
+class FourOutputMixin(object):
+    @property
+    def output_a(self):
+        return self._outputs[0]
+
+    @property
+    def output_b(self):
+        return self._outputs[1]
+
+    @property
+    def output_c(self):
+        return self._outputs[2]
+
+    @property
+    def output_d(self):
+        return self._outputs[3]
+
 class SumCarryOuputMixin(object):
     @property
     def sum(self):
