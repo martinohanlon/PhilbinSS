@@ -2,9 +2,9 @@ from interfaces import Interface
 from logicgates import And, Xor, Or
 from components import Split, Power
 from primitives import Cathode
-from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin, OneEightBitOutputMixin, EightBit
+from mixins import InputAMixin, InputBMixin, InputCMixin, InputOperatorMixin, OutputSumMixin, OutputCarryMixin, InputAEightBitMixin, InputBEightBitMixin, OutputSumEightBitMixin, OutputCarryMixin
 
-class HalfAdder(Interface, TwoInputMixin, SumCarryOuputMixin):
+class HalfAdder(Interface, InputAMixin, InputBMixin, OutputSumMixin, OutputCarryMixin):
     def __init__(self):
         x = Xor()
         a = And()
@@ -24,7 +24,7 @@ class HalfAdder(Interface, TwoInputMixin, SumCarryOuputMixin):
     def __str__(self):
         return "HalfAdder: " + super(HalfAdder, self).__str__()
 
-class FullAdder(Interface, ThreeInputMixin, SumCarryOuputMixin):
+class FullAdder(Interface, InputAMixin, InputBMixin, InputCMixin, OutputSumMixin, OutputCarryMixin):
     def __init__(self):
         ha1 = HalfAdder()
         ha2 = HalfAdder()
@@ -53,7 +53,7 @@ class FullAdder(Interface, ThreeInputMixin, SumCarryOuputMixin):
     def __str__(self):
         return "FullAdder: " + super(FullAdder, self).__str__()
 
-class EightBitRippleCarryAdder(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+class EightBitRippleCarryAdder(Interface, InputAEightBitMixin, InputBEightBitMixin, OutputSumEightBitMixin, OutputCarryMixin):
     def __init__(self):
         ha = HalfAdder()
         fa1 = FullAdder()
@@ -87,7 +87,7 @@ class EightBitRippleCarryAdder(Interface, TwoEightBitInputMixin, OneEightBitSumO
     def __str__(self):
         return "EightBitRippleCarryAdder: inputs = {{input_a = {}, input_b = {}}}, outputs = {{sum = {}, carry = {}}}".format(self.input_a, self.input_b, self.sum, self.carry)
 
-class EightBitRippleCarryAdderSubtractor(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+class EightBitRippleCarryAdderSubtractor(Interface, InputAEightBitMixin, InputBEightBitMixin, InputOperatorMixin, OutputSumEightBitMixin, OutputCarryMixin):
     def __init__(self):
         fa0 = FullAdder()
         fa1 = FullAdder()
@@ -141,15 +141,11 @@ class EightBitRippleCarryAdderSubtractor(Interface, TwoEightBitInputMixin, OneEi
 
         super(EightBitRippleCarryAdderSubtractor, self).__init__(inputs, outputs)
 
-    @property
-    def operator(self):
-        return self.inputs["operator"]
-
     def __str__(self):
         return "EightBitRippleCarryAdderSubtractor: inputs = {{input_a = {}, input_b = {}, operator = {}}}, outputs = {{sum = {}, carry = {}}}".format(self.input_a, self.input_b, self.operator, self.sum, self.carry)
 
 
-class ALU(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+class ALU(Interface, InputAEightBitMixin, InputBEightBitMixin, InputOperatorMixin, OutputSumEightBitMixin, OutputCarryMixin):
     def __init__(self):
         """
         Truth table for overflow
@@ -167,6 +163,10 @@ class ALU(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
         1  0        0
         0  1        0
         0  0        0
+
+        operator:
+        '0' - addition
+        '1' - subtraction
         """
         rcas = EightBitRippleCarryAdderSubtractor()
         overflow_xor = Xor()
@@ -207,15 +207,6 @@ class ALU(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
 
         super(ALU, self).__init__(inputs, outputs)
 
-    #inputs
-    @property
-    def operator(self):
-        """
-        '0' - addition
-        '1' - subtraction
-        """
-        return self.inputs["operator"]
-    
     #output flags    
     @property
     def overflow(self):

@@ -1,9 +1,9 @@
 from interfaces import Interface
 from components import Split
 from logicgates import Not, And, Not, Or
-from mixins import TwoInputMixin, FourInputMixin, OneOutputMixin, FourOutputMixin
+from mixins import InputAMixin, InputBMixin, InputCMixin, InputDMixin, OutputMixin, OutputAMixin, OutputBMixin, OutputCMixin, OutputDMixin
 
-class TwoToOneMultiplexer(Interface, TwoInputMixin, OneOutputMixin):
+class TwoToOneMultiplexer(Interface, InputAMixin, InputBMixin, OutputMixin):
     def __init__(self):
         n = Not()
         a1 = And()
@@ -35,7 +35,7 @@ class TwoToOneMultiplexer(Interface, TwoInputMixin, OneOutputMixin):
     def __str__(self):
         return "Two To One Multiplexer: " + super(TwoToOneMultiplexer, self).__str__()
 
-class FourToOneMultiplexer(Interface, FourInputMixin, OneOutputMixin):
+class FourToOneMultiplexer(Interface, InputAMixin, InputBMixin, InputCMixin, InputDMixin, OutputMixin):
     def __init__(self):
         mp1 = TwoToOneMultiplexer()
         mp2 = TwoToOneMultiplexer()
@@ -72,7 +72,7 @@ class FourToOneMultiplexer(Interface, FourInputMixin, OneOutputMixin):
     def __str__(self):
         return "Four To One Multiplexer: " + super(FourToOneMultiplexer, self).__str__()
 
-class TwoToFourDecoder(Interface, TwoInputMixin, FourOutputMixin):
+class TwoToFourDecoder(Interface, InputAMixin, InputBMixin, OutputAMixin, OutputBMixin, OutputCMixin, OutputDMixin):
     def __init__(self):
         n1 = Not()
         n2 = Not()

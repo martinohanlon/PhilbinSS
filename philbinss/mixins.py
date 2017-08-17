@@ -1,237 +1,116 @@
+from interfaces import EightBit
 
-class OneInputMixin(object):
+class InputMixin(object):
     @property
     def input(self):
         return self._inputs["input"]
 
-class TwoInputMixin(object):
+class InputAMixin(object):
     @property
     def input_a(self):
         return self._inputs["input_a"]
 
+class InputBMixin(object):
     @property
     def input_b(self):
         return self._inputs["input_b"]
 
-class ThreeInputMixin(object):
-    @property
-    def input_a(self):
-        return self._inputs["input_a"]
-
-    @property
-    def input_b(self):
-        return self._inputs["input_b"]
-
+class InputCMixin(object):
     @property
     def input_c(self):
         return self._inputs["input_c"]
 
-class FourInputMixin(object):
-    @property
-    def input_a(self):
-        return self._inputs["input_a"]
-
-    @property
-    def input_b(self):
-        return self._inputs["input_b"]
-
-    @property
-    def input_c(self):
-        return self._inputs["input_c"]
-
+class InputDMixin(object):
     @property
     def input_d(self):
         return self._inputs["input_d"]
 
-class SetResetInputMixin(object):
+class InputSetMixin(object):
     @property
     def set(self):
         return self._inputs["set"]
 
+class InputResetMixin(object):
     @property
     def reset(self):
         return self._inputs["reset"]
 
-class DataWriteInputMixin(object):
+class InputDataMixin(object):
     @property
     def data(self):
         return self._inputs["data"]
 
+class InputWriteMixin(object):
     @property
     def write(self):
         return self._inputs["write"]
 
-class OneOutputMixin(object):
-    @property
-    def output(self):
-        return self._outputs["output"]
-
-class FourOutputMixin(object):
-    @property
-    def output_a(self):
-        return self._outputs["output_a"]
-
-    @property
-    def output_b(self):
-        return self._outputs["output_b"]
-
-    @property
-    def output_c(self):
-        return self._outputs["output_c"]
-
-    @property
-    def output_d(self):
-        return self._outputs["output_d"]
-
-class SumCarryOuputMixin(object):
-    @property
-    def sum(self):
-        return self._outputs["sum"]
-
-    @property
-    def carry(self):
-        return self._outputs["carry"]
-
-class EightBit(object):
-    def __init__(self, bits):
-        if len(bits) != 8:
-            raise ValueError("there must be 8 bits - {} given".format(len(bits)))
-        self._bits = bits
-
-    def set_bit(self, bit, value):
-        self._bits[bit] = value
-
-    def get_bit(self, bit):
-        return self._bits[bit]
-
-    @property
-    def bits(self):
-        return self._bits
-
-    @property
-    def bit0(self):
-        return self._bits[0]
-
-    @bit0.setter
-    def bit0(self, value):
-        self._bits[0] = value
-
-    @property
-    def bit1(self):
-        return self._bits[1]
-
-    @bit1.setter
-    def bit1(self, value):
-        self._bits[1] = value
-
-    @property
-    def bit2(self):
-        return self._bits[2]
-
-    @bit2.setter
-    def bit2(self, value):
-        self._bits[2] = value
-
-    @property
-    def bit3(self):
-        return self._bits[3]
-
-    @bit3.setter
-    def bit3(self, value):
-        self._bits[3] = value
-
-    @property
-    def bit4(self):
-        return self._bits[4]
-
-    @bit4.setter
-    def bit4(self, value):
-        self._bits[4] = value
-
-    @property
-    def bit5(self):
-        return self._bits[5]
-    
-    @bit5.setter
-    def bit5(self, value):
-        self._bits[5] = value
-
-    @property
-    def bit6(self):
-        return self._bits[6]
-
-    @bit6.setter
-    def bit6(self, value):
-        self._bits[6] = value
-
-    @property
-    def bit7(self):
-        return self._bits[7]
-    
-    @bit7.setter
-    def bit7(self, value):
-        self._bits[7] = value
-
-    def get_binary(self):
-        binary_value = ""
-        for bit in self._bits:
-            binary_value += "1" if bit.value else "0"
-        return binary_value
-
-    @property
-    def binary_value(self):
-        return self.get_binary()
-
-    def get_int(self):
-        #there must be a better way of converting binary to int
-        multiplier = 1
-        int_value = 0
-        for bit in self._bits:
-            if bit.value:
-                int_value += multiplier
-            multiplier = multiplier * 2
-        
-        return int_value
-
-    @property
-    def int_value(self):
-        """
-        Returns the integer value of the bits - useful for testing
-        """
-        return self.get_int()
-
-    def __str__(self):
-        return "8 bit(binary = {}, int = {})".format(self.binary_value, self.int_value)
-
-class OneEightBitDataOneWriteInputMixin(object):
+class InputDataEightBitMixin(object):
     @property
     def data(self):
         return EightBit(self._inputs["data"])
 
-    @property
-    def write(self):
-        return self._inputs["write"]
-
-class TwoEightBitInputMixin(object):
+class InputAEightBitMixin(object):
     @property
     def input_a(self):
         return EightBit(self._inputs["input_a"])
 
+class InputBEightBitMixin(object):
     @property
     def input_b(self):
         return EightBit(self._inputs["input_b"])
 
-class OneEightBitOutputMixin(object):
+class InputWriteMixin(object):
+    @property
+    def write(self):
+        return self._inputs["write"]
+
+class InputOperatorMixin(object):
+    @property
+    def operator(self):
+        return self._inputs["operator"]
+
+class OutputMixin(object):
     @property
     def output(self):
-        return EightBit(self._outputs["output"])
+        return self._outputs["output"]
 
-class OneEightBitSumOneCarryOutputMixin(object):
+class OutputAMixin(object):
+    @property
+    def output_a(self):
+        return self._outputs["output_a"]
+
+class OutputBMixin(object):
+    @property
+    def output_b(self):
+        return self._outputs["output_b"]
+
+class OutputCMixin(object):
+    @property
+    def output_c(self):
+        return self._outputs["output_c"]
+
+class OutputDMixin(object):
+    @property
+    def output_d(self):
+        return self._outputs["output_d"]
+
+class OutputSumMixin(object):
     @property
     def sum(self):
-        return EightBit(self._outputs["sum"])
+        return self._outputs["sum"]
 
+class OutputCarryMixin(object):
     @property
     def carry(self):
         return self._outputs["carry"]
 
+class OutputEightBitMixin(object):
+    @property
+    def output(self):
+        return EightBit(self._outputs["output"])
+
+class OutputSumEightBitMixin(object):
+    @property
+    def sum(self):
+        return EightBit(self._outputs["sum"])

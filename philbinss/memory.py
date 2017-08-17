@@ -2,9 +2,9 @@ from interfaces import Interface
 from primitives import Cathode
 from components import Split, Transistor
 from logicgates import Or, Not, And
-from mixins import SetResetInputMixin, DataWriteInputMixin, OneOutputMixin, OneEightBitDataOneWriteInputMixin, OneEightBitOutputMixin
+from mixins import InputSetMixin, InputResetMixin, InputDataMixin, InputWriteMixin, InputDataEightBitMixin, InputWriteMixin, OutputMixin, OutputEightBitMixin
 
-class AndOrLatch(Interface, SetResetInputMixin, OneOutputMixin):
+class AndOrLatch(Interface, InputSetMixin, InputResetMixin, OutputMixin):
     def __init__(self):
         o = Or()
         a = And()
@@ -31,7 +31,7 @@ class AndOrLatch(Interface, SetResetInputMixin, OneOutputMixin):
     def __str__(self):
         return "And Or Latch: " + super(AndOrLatch, self).__str__()
         
-class GatedLatch(Interface, DataWriteInputMixin, OneOutputMixin):
+class GatedLatch(Interface, InputDataMixin, InputWriteMixin, OutputMixin):
     def __init__(self):
 
         data_split = Split()
@@ -142,7 +142,7 @@ class RAMCell(Interface):
     def __str__(self):
         return "RAM Cell: " + super(RAMCell, self).__str__()
         
-class EightBitRegister(Interface, OneEightBitDataOneWriteInputMixin, OneEightBitOutputMixin):
+class EightBitRegister(Interface, InputDataEightBitMixin, InputWriteMixin, OutputEightBitMixin):
     def __init__(self):
         gl0 = GatedLatch()
         gl1 = GatedLatch()

@@ -1,8 +1,8 @@
 from interfaces import Interface
 from primitives import Anode, Cathode
-from mixins import OneInputMixin, OneOutputMixin
+from mixins import InputMixin, OutputMixin
 
-class Split(Interface, OneInputMixin):
+class Split(Interface, InputMixin):
     """
     A Split is used to split 1 input into many outputs
     """
@@ -40,7 +40,7 @@ class Split(Interface, OneInputMixin):
     def __str__(self):
         return "Split: {}".format(self.input)
 
-class Join(Interface, OneOutputMixin):
+class Join(Interface, OutputMixin):
     """
     A join is used to bring multiple inputs into 1 output
     """

@@ -1,8 +1,8 @@
 from interfaces import Interface
 from components import Transistor, Power, Join, Split
-from mixins import OneInputMixin, TwoInputMixin, OneOutputMixin
+from mixins import InputMixin, InputAMixin, InputBMixin, OutputMixin
 
-class Not(Interface, OneInputMixin, OneOutputMixin):
+class Not(Interface, InputMixin, OutputMixin):
     """
     The implementation of a Not gate, it accepts a single input and has a single output 
     """
@@ -20,7 +20,7 @@ class Not(Interface, OneInputMixin, OneOutputMixin):
     def __str__(self):
         return "Not: " + super(Not, self).__str__()
 
-class And(Interface, TwoInputMixin, OneOutputMixin):
+class And(Interface, InputAMixin, InputBMixin, OutputMixin):
     """
     The implementation of an And gate, it accepts a two inputs and has a single output 
     """
@@ -42,7 +42,7 @@ class And(Interface, TwoInputMixin, OneOutputMixin):
     def __str__(self):
         return "And: " + super(And, self).__str__()
 
-class Or(Interface, TwoInputMixin, OneOutputMixin):
+class Or(Interface, InputAMixin, InputBMixin, OutputMixin):
     """
     The implementation of an Or gate, it accepts a two inputs and has a single output 
     """
@@ -65,7 +65,7 @@ class Or(Interface, TwoInputMixin, OneOutputMixin):
     def __str__(self):
         return "Or: " + super(Or, self).__str__()
 
-class Xor(Interface, TwoInputMixin, OneOutputMixin):
+class Xor(Interface, InputAMixin, InputBMixin, OutputMixin):
     """
     The implementation of an Xor gate, it accepts a two inputs and has a single output 
     """
