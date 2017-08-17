@@ -27,17 +27,22 @@ class ControlPanel():
         self.output_checks = []
 
         #setup the inputs and power switches
-        for i in range(len(self.component.inputs)):
+        #for i in range(len(self.component.inputs)):
+        i = 0
+        for input_key in self.component.inputs:
             p = Power()
-            p.connect(self.component.inputs[i])
+            p.connect(self.component.inputs[input_key])
             self.input_power.append(p)
-            self.input_checks.append(CheckBox(self.box_inputs, text = "input {}".format(i), grid=[i,0], command=self.update_values))
+            self.input_checks.append(CheckBox(self.box_inputs, text = input_key, grid=[i,0], command=self.update_values))
+            i += 1
 
         #setup the outputs
-        for o in range(len(self.component.outputs)):
-            output_check = CheckBox(self.box_outputs, text = "output {}".format(o), grid=[o,2])
+        o = 0
+        for output_key in self.component.outputs:
+            output_check = CheckBox(self.box_outputs, text = output_key, grid=[o,2])
             output_check.configure(state = "disabled")
             self.output_checks.append(output_check)
+            o += 1
 
         self.update_values()
 
@@ -47,11 +52,14 @@ class ControlPanel():
             self.input_power[i].value = (self.input_checks[i].get_value() == 1) 
 
         #update the outputs
-        for o in range(len(self.component.outputs)):
-            if self.component.outputs[o].value:
+        #for o in range(len(self.component.outputs)):
+        o = 0
+        for output_key in self.component.outputs:
+            if self.component.outputs[output_key].value:
                 self.output_checks[o].select()
             else:
                 self.output_checks[o].deselect()
+            o += 1
 
     def reload_component(self,x):
         self.box_inputs.destroy()
