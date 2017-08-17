@@ -4,14 +4,16 @@ from logicgates import Not, And, Or, Xor
 import operator
 
 def logic_gate_test(logic_gate, op):
+    _str = logic_gate.__str__()
+
     #how many inputs
     no_inputs = len(logic_gate.inputs)
 
     #create power switch for each input
     power = []
-    for i in range(no_inputs):
+    for thisinput in logic_gate.inputs:
         p = Power()
-        p.connect(logic_gate.inputs[i])
+        p.connect(logic_gate.inputs[thisinput]) 
         power.append(p)
     
     #loop through possible states
@@ -24,7 +26,7 @@ def logic_gate_test(logic_gate, op):
         #test the result
         result = op(*state)
         assert logic_gate.output.value == result
-
+        
     return results
 
 def get_binary_states(no_inputs):
@@ -32,7 +34,7 @@ def get_binary_states(no_inputs):
 
 def test_not():
     logic_gate_test(Not(), operator.__not__)
-    
+
 def test_and():
     logic_gate_test(And(), operator.__and__)
         
@@ -47,7 +49,6 @@ def run_tests():
     test_or()
     test_and()
     test_xor()
-    
     print("logicgates - all tests run")
     
 run_tests()

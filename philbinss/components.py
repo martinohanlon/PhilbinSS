@@ -1,35 +1,21 @@
+from interfaces import Interface
 from primitives import Anode, Cathode
 from mixins import OneInputMixin, OneOutputMixin
 
-class Base(object):
-    """
-    The Base of all components it implements the simplest of interfaces, input(s) and output(s)
-    """
-    def __init__(self, inputs, outputs):
-        self._inputs = inputs
-        self._outputs = outputs
-
-    @property
-    def inputs(self):
-        return self._inputs
-
-    @property
-    def outputs(self):
-        return self._outputs
-
-    def __str__(self):
-        return "inputs = {}, outputs = {}".format(self.inputs, self.outputs)
-
-class Split(Base, OneInputMixin):
+class Split(Interface, OneInputMixin):
     """
     A Split is used to split 1 input into many outputs
     """
     def __init__(self, *outputs):
+        inputs = {}
         #if the input changes, update the outputs
-        theinput = Cathode(value_changed = self._update_state)
+        inputs["input"] = Cathode(value_changed = self._update_state)
 
         #create the split with zero outputs 
-        super(Split, self).__init__([theinput], [])
+        super(Split, self).__init__(inputs, {})
+
+        #nodes the split will output to and update 
+        self._split_outputs = []
 
         # connect up the outputs
         for output in outputs:
@@ -39,12 +25,12 @@ class Split(Base, OneInputMixin):
         #create an anode which will connect to the output
         anode = Anode()
         anode.connect(output)
-        self._outputs.append(anode)
+        self._split_outputs.append(anode)
 
         self._update_state()
         
     def _update_state(self):
-        for output in self._outputs:
+        for output in self._split_outputs:
             output.value = self.value
 
     @property
@@ -54,15 +40,19 @@ class Split(Base, OneInputMixin):
     def __str__(self):
         return "Split: {}".format(self.input)
 
-class Join(Base, OneOutputMixin):
+class Join(Interface, OneOutputMixin):
     """
     A join is used to bring multiple inputs into 1 output
     """
     def __init__(self, *inputs):
-        output = Anode()
+        outputs = {}
+        outputs["output"] = Anode()
 
         #create the join with zero inputs 
-        super(Join, self).__init__([], [output])
+        super(Join, self).__init__({}, outputs)
+
+        #nodes the join will take values from
+        self._join_inputs = []
 
         #connect the inputs
         for aninput in inputs:
@@ -70,7 +60,7 @@ class Join(Base, OneOutputMixin):
     
     def connect(self, aninput):
         #add the input to the connections
-        self._inputs.append(aninput)
+        self._join_inputs.append(aninput)
         
         #create and connect cathode to the input
         cathode = Cathode(value_changed = self._update_state)
@@ -84,7 +74,7 @@ class Join(Base, OneOutputMixin):
     @property
     def value(self):
         #if any node is True, return True, else False
-        for aninput in self._inputs:
+        for aninput in self._join_inputs:
             if aninput.value:
                 return True
         return False
@@ -140,7 +130,7 @@ class MultiPower(Split):
 #the mainpower - used to power the transistors
 _MAINPOWER = MultiPower(on = True)
 
-class Transistor(Base):
+class Transistor(Interface):
     """
     Transistor is the key component and simulates a single transistor
     """
@@ -156,7 +146,15 @@ class Transistor(Base):
             _MAINPOWER.connect(self._collector)
             self._update_state()
 
-        super(Transistor, self).__init__([self._collector, self._base], [self._emitter, self._collector_output])
+        inputs = {}
+        inputs["collector"] = self._collector
+        inputs["base"] = self._base
+
+        outputs = {}
+        outputs["emitter"] = self.emitter
+        outputs["collector output"] = self.collector_output
+
+        super(Transistor, self).__init__(inputs, outputs)
         
     @property
     def collector(self):

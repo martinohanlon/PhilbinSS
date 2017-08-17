@@ -4,6 +4,7 @@ from random import getrandbits
 
 def test_andorlatch():
     latch = AndOrLatch()
+    _str = latch.__str__()
     
     input_set = Power()
     input_reset = Power()
@@ -47,6 +48,7 @@ def test_andorlatch():
 
 def test_gatedlatch():
     latch = GatedLatch()
+    _str = latch.__str__()
 
     input_data = Power()
     input_write = Power()
@@ -90,6 +92,7 @@ def test_gatedlatch():
 
 def test_eightbitregister():
     reg = EightBitRegister()
+    _str = reg.__str__()
 
     #create input power switches and connect up ripple carry adder
     inputs_data = []
@@ -136,6 +139,7 @@ def test_eightbitregister():
 
 def test_ramcell():
     rc = RAMCell()
+    _str = rc.__str__()
     
     in_col = Power()
     in_row = Power()

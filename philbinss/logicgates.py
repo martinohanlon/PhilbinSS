@@ -1,22 +1,26 @@
-from components import Base, Transistor, Power, Join, Split
+from interfaces import Interface
+from components import Transistor, Power, Join, Split
 from mixins import OneInputMixin, TwoInputMixin, OneOutputMixin
 
-class Not(Base, OneInputMixin, OneOutputMixin):
+class Not(Interface, OneInputMixin, OneOutputMixin):
     """
     The implementation of a Not gate, it accepts a single input and has a single output 
     """
     def __init__(self):
         t = Transistor()
 
-        inputs = [t.base]
-        outputs = [t.collector_output]
+        inputs = {}
+        outputs = {}
+
+        inputs["input"] = t.base
+        outputs["output"] = t.collector_output
 
         super(Not, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "Not: input = {}, output = {}".format(self.input, self.output)
-        
-class And(Base, TwoInputMixin, OneOutputMixin):
+        return "Not: " + super(Not, self).__str__()
+
+class And(Interface, TwoInputMixin, OneOutputMixin):
     """
     The implementation of an And gate, it accepts a two inputs and has a single output 
     """
@@ -24,20 +28,21 @@ class And(Base, TwoInputMixin, OneOutputMixin):
         t1 = Transistor()
         t2 = Transistor(connect_to_power = False)
         
-        input_a = t1.base
-        input_b = t2.base
-        inputs = [input_a, input_b]
+        inputs = {}
+        inputs["input_a"] = t1.base
+        inputs["input_b"] = t2.base
         
         t1.emitter.connect(t2.collector)
         
-        outputs = [t2.emitter]
+        outputs = {}
+        outputs["output"] = t2.emitter
 
         super(And, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "And: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
+        return "And: " + super(And, self).__str__()
 
-class Or(Base, TwoInputMixin, OneOutputMixin):
+class Or(Interface, TwoInputMixin, OneOutputMixin):
     """
     The implementation of an Or gate, it accepts a two inputs and has a single output 
     """
@@ -45,21 +50,22 @@ class Or(Base, TwoInputMixin, OneOutputMixin):
         t1 = Transistor()
         t2 = Transistor()
 
-        input_a = t1.base
-        input_b = t2.base
-        inputs = [input_a, input_b]
-
+        inputs = {}
+        inputs["input_a"] = t1.base
+        inputs["input_b"] = t2.base
+        
         #join the 2 transmitter emitters
         join = Join(t1.emitter, t2.emitter)
         
-        outputs = [join.output]
+        outputs = {}
+        outputs["output"] = join.output
         
         super(Or, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "Or: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
+        return "Or: " + super(Or, self).__str__()
 
-class Xor(Base, TwoInputMixin, OneOutputMixin):
+class Xor(Interface, TwoInputMixin, OneOutputMixin):
     """
     The implementation of an Xor gate, it accepts a two inputs and has a single output 
     """
@@ -70,10 +76,10 @@ class Xor(Base, TwoInputMixin, OneOutputMixin):
         n = Not()
         a2 = And()
 
-        #split input a and b to go to the and1 and or gate 
-        input_a = Split(a1.input_a, o.input_a).input
-        input_b = Split(a1.input_b, o.input_b).input
-        inputs = [input_a, input_b]
+        #split input a and b to go to the and1 and or gate
+        inputs = {}
+        inputs["input_a"] = Split(a1.input_a, o.input_a).input
+        inputs["input_b"] = Split(a1.input_b, o.input_b).input
 
         #output of and2 to not
         a1.output.connect(n.input)
@@ -85,9 +91,10 @@ class Xor(Base, TwoInputMixin, OneOutputMixin):
         o.output.connect(a2.input_b)
         
         #output is the result of and2
-        outputs = [a2.output]
+        outputs = {}
+        outputs["output"] = a2.output
 
         super(Xor, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "Xor: input_a = {}, input_b = {}, output = {}".format(self.input_a, self.input_b, self.output)
+        return "Xor: " + super(Xor, self).__str__()

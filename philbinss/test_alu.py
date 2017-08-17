@@ -4,6 +4,8 @@ from random import randint
 
 def test_halfadder():
     ha = HalfAdder()
+    _str = ha.__str__()
+
     in1 = Power()
     in2 = Power()
 
@@ -32,6 +34,8 @@ def test_halfadder():
 
 def test_fulladder():
     fa = FullAdder()
+    _str = fa.__str__()
+
     in1 = Power()
     in2 = Power()
     in3 = Power()
@@ -100,6 +104,7 @@ def get_eight_bit_switch(eight_bit_input):
 
 def test_eightbitripplecarryadder():
     rca = EightBitRippleCarryAdder()
+    _str = rca.__str__()
 
     #create input power switches and connect up ripple carry adder
     inputs_a = get_eight_bit_switch(rca.input_a)
@@ -128,6 +133,7 @@ def test_eightbitripplecarryadder():
 
 def test_eightbitripplecarryaddersubtractor():
     rcas = EightBitRippleCarryAdderSubtractor()
+    _str = rcas.__str__()
 
     #create input power switches and connect up ripple carry adder
     inputs_a = get_eight_bit_switch(rcas.input_a)
@@ -175,7 +181,8 @@ def test_eightbitripplecarryaddersubtractor():
 
 def test_alu():
     alu = ALU()
-
+    _str = alu.__str__()
+    
     #create input power switches and connect up ripple carry adder
     inputs_a = get_eight_bit_switch(alu.input_a)
     inputs_b = get_eight_bit_switch(alu.input_b)

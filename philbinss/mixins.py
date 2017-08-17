@@ -1,95 +1,96 @@
+
 class OneInputMixin(object):
     @property
     def input(self):
-        return self._inputs[0]
+        return self._inputs["input"]
 
 class TwoInputMixin(object):
     @property
     def input_a(self):
-        return self._inputs[0]
+        return self._inputs["input_a"]
 
     @property
     def input_b(self):
-        return self._inputs[1]
+        return self._inputs["input_b"]
 
 class ThreeInputMixin(object):
     @property
     def input_a(self):
-        return self._inputs[0]
+        return self._inputs["input_a"]
 
     @property
     def input_b(self):
-        return self._inputs[1]
+        return self._inputs["input_b"]
 
     @property
     def input_c(self):
-        return self._inputs[2]
+        return self._inputs["input_c"]
 
 class FourInputMixin(object):
     @property
     def input_a(self):
-        return self._inputs[0]
+        return self._inputs["input_a"]
 
     @property
     def input_b(self):
-        return self._inputs[1]
+        return self._inputs["input_b"]
 
     @property
     def input_c(self):
-        return self._inputs[2]
+        return self._inputs["input_c"]
 
     @property
     def input_d(self):
-        return self._inputs[3]
+        return self._inputs["input_d"]
 
 class SetResetInputMixin(object):
     @property
     def set(self):
-        return self._inputs[0]
+        return self._inputs["set"]
 
     @property
     def reset(self):
-        return self._inputs[1]
+        return self._inputs["reset"]
 
 class DataWriteInputMixin(object):
     @property
     def data(self):
-        return self._inputs[0]
+        return self._inputs["data"]
 
     @property
     def write(self):
-        return self._inputs[1]
+        return self._inputs["write"]
 
 class OneOutputMixin(object):
     @property
     def output(self):
-        return self._outputs[0]
+        return self._outputs["output"]
 
 class FourOutputMixin(object):
     @property
     def output_a(self):
-        return self._outputs[0]
+        return self._outputs["output_a"]
 
     @property
     def output_b(self):
-        return self._outputs[1]
+        return self._outputs["output_b"]
 
     @property
     def output_c(self):
-        return self._outputs[2]
+        return self._outputs["output_c"]
 
     @property
     def output_d(self):
-        return self._outputs[3]
+        return self._outputs["output_d"]
 
 class SumCarryOuputMixin(object):
     @property
     def sum(self):
-        return self._outputs[0]
+        return self._outputs["sum"]
 
     @property
     def carry(self):
-        return self._outputs[1]
+        return self._outputs["carry"]
 
 class EightBit(object):
     def __init__(self, bits):
@@ -205,32 +206,32 @@ class EightBit(object):
 class OneEightBitDataOneWriteInputMixin(object):
     @property
     def data(self):
-        return EightBit(self._inputs[0])
+        return EightBit(self._inputs["data"])
 
     @property
     def write(self):
-        return self._inputs[1]
+        return self._inputs["write"]
 
 class TwoEightBitInputMixin(object):
     @property
     def input_a(self):
-        return EightBit(self._inputs[0])
+        return EightBit(self._inputs["input_a"])
 
     @property
     def input_b(self):
-        return EightBit(self._inputs[1])
+        return EightBit(self._inputs["input_b"])
 
 class OneEightBitOutputMixin(object):
     @property
     def output(self):
-        return EightBit(self._outputs[0])
+        return EightBit(self._outputs["output"])
 
 class OneEightBitSumOneCarryOutputMixin(object):
     @property
     def sum(self):
-        return EightBit(self._outputs[0])
+        return EightBit(self._outputs["sum"])
 
     @property
     def carry(self):
-        return self._outputs[1]
+        return self._outputs["carry"]
 

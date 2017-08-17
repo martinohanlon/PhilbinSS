@@ -1,8 +1,9 @@
-from components import Base, Split
+from interfaces import Interface
+from components import Split
 from logicgates import Not, And, Not, Or
 from mixins import TwoInputMixin, FourInputMixin, OneOutputMixin, FourOutputMixin
 
-class TwoToOneMultiplexer(Base, TwoInputMixin, OneOutputMixin):
+class TwoToOneMultiplexer(Interface, TwoInputMixin, OneOutputMixin):
     def __init__(self):
         n = Not()
         a1 = And()
@@ -10,11 +11,11 @@ class TwoToOneMultiplexer(Base, TwoInputMixin, OneOutputMixin):
         o = Or()
 
         #create inputs 
-        input_a = a1.input_a
-        input_b = a2.input_a
+        inputs = {}
+        inputs["input_a"] = a1.input_a
+        inputs["input_b"] = a2.input_a
         signal_split = Split(n.input, a2.input_b)
-        signal = signal_split.input
-        inputs = [input_a, input_b, signal]
+        inputs["signal"] = signal_split.input
         
         #connect up gates 
         n.output.connect(a1.input_b)
@@ -22,53 +23,56 @@ class TwoToOneMultiplexer(Base, TwoInputMixin, OneOutputMixin):
         a2.output.connect(o.input_b)
 
         #create output
-        outputs = [o.output]
+        outputs = {}
+        outputs["output"] = o.output
 
         super(TwoToOneMultiplexer, self).__init__(inputs, outputs)
 
     @property
     def signal(self):
-        return self.inputs[2]
+        return self.inputs["signal"]
 
     def __str__(self):
-        return "Two To One Multiplexer: input_a = {}, input_b = {}, signal = {}, output = {}".format(self.input_a, self.input_b, self.signal, self.output)
+        return "Two To One Multiplexer: " + super(TwoToOneMultiplexer, self).__str__()
 
-class FourToOneMultiplexer(Base, FourInputMixin, OneOutputMixin):
+class FourToOneMultiplexer(Interface, FourInputMixin, OneOutputMixin):
     def __init__(self):
         mp1 = TwoToOneMultiplexer()
         mp2 = TwoToOneMultiplexer()
         mp3 = TwoToOneMultiplexer()
         
-        input_a = mp1.input_a
-        input_b = mp1.input_b
-        input_c = mp2.input_a
-        input_d = mp2.input_b
+        inputs = {}
+        inputs["input_a"] = mp1.input_a
+        inputs["input_b"] = mp1.input_b
+        inputs["input_c"] = mp2.input_a
+        inputs["input_d"] = mp2.input_b
 
         mp1.output.connect(mp3.input_a)
         mp2.output.connect(mp3.input_b)
 
         signal_a_split = Split(mp1.signal, mp2.signal)
 
-        signal_a = signal_a_split.input
-        signal_b = mp3.signal
+        inputs["signal_a"] = signal_a_split.input
+        inputs["signal_b"] = mp3.signal
 
-        inputs = [input_a, input_b, input_c, input_d, signal_a, signal_b]
-        outputs = [mp3.output]
+        #inputs = [input_a, input_b, input_c, input_d, signal_a, signal_b]
+        outputs = {}
+        outputs["output"] = mp3.output
 
         super(FourToOneMultiplexer, self).__init__(inputs, outputs)
 
     @property
     def signal_a(self):
-        return self.inputs[4]
+        return self.inputs["signal_a"]
 
     @property
     def signal_b(self):
-        return self.inputs[5]
+        return self.inputs["signal_b"]
 
     def __str__(self):
-        return "Four To One Multiplexer: input_a = {}, input_b = {}, input_c = {}, input_d = {}, signal_a = {}, signal_b = {} output = {}".format(self.input_a, self.input_b, self.input_c, self.input_d, self.signal_a ,self.signal_b, self.output)
+        return "Four To One Multiplexer: " + super(FourToOneMultiplexer, self).__str__()
 
-class TwoToFourDecoder(Base, TwoInputMixin, FourOutputMixin):
+class TwoToFourDecoder(Interface, TwoInputMixin, FourOutputMixin):
     def __init__(self):
         n1 = Not()
         n2 = Not()
@@ -77,13 +81,13 @@ class TwoToFourDecoder(Base, TwoInputMixin, FourOutputMixin):
         a3 = And()
         a4 = And()
 
+        inputs = {}
+
         a_split = Split(n1.input, a2.input_a, a4.input_b)
-        input_a = a_split.input
+        inputs["input_a"] = a_split.input
 
         b_split = Split(n2.input, a3.input_a, a4.input_a)
-        input_b = b_split.input
-
-        inputs = [input_a, input_b]
+        inputs["input_b"] = b_split.input
 
         n1_split = Split(a1.input_a, a3.input_b)
         n1.output.connect(n1_split.input)
@@ -91,14 +95,14 @@ class TwoToFourDecoder(Base, TwoInputMixin, FourOutputMixin):
         n2_split = Split(a1.input_b, a2.input_b)
         n2.output.connect(n2_split.input)
 
-        output_a = a1.output
-        output_b = a2.output
-        output_c = a3.output
-        output_d = a4.output
-
-        outputs = [output_a, output_b, output_c, output_d]
+        outputs = {}
+        outputs["output_a"] = a1.output
+        outputs["output_b"] = a2.output
+        outputs["output_c"] = a3.output
+        outputs["output_d"] = a4.output
 
         super(TwoToFourDecoder, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "Two To Four Decoder: input_a = {}, input_b = {}, output_a = {}, output_b = {}, output_c = {}, output_d = {}".format(self.input_a, self.input_b, self.output_a, self.output_b, self.output_c, self.output_d)
+        return "Two To Four Decoder: " + super(TwoToFourDecoder, self).__str__()
+        

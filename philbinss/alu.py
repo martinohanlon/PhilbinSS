@@ -1,39 +1,40 @@
+from interfaces import Interface
 from logicgates import And, Xor, Or
-from components import Base, Split, Power
+from components import Split, Power
 from primitives import Cathode
-from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin, OneEightBitOutputMixin
+from mixins import TwoInputMixin, ThreeInputMixin, SumCarryOuputMixin, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin, OneEightBitOutputMixin, EightBit
 
-class HalfAdder(Base, TwoInputMixin, SumCarryOuputMixin):
+class HalfAdder(Interface, TwoInputMixin, SumCarryOuputMixin):
     def __init__(self):
         x = Xor()
         a = And()
 
         #split input a and b to go to the xor and and gate 
-        input_a = Split(x.input_a, a.input_a).input
-        input_b = Split(x.input_b, a.input_b).input
-        inputs = [input_a, input_b]
-
+        inputs = {}
+        inputs["input_a"] = Split(x.input_a, a.input_a).input
+        inputs["input_b"] = Split(x.input_b, a.input_b).input
+        
         #get the output from the xor and and gates
-        thesum = x.output
-        carry = a.output
-        outputs = [thesum, carry]
+        outputs = {}
+        outputs["sum"] = x.output
+        outputs["carry"] = a.output
 
         super(HalfAdder, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "HalfAdder: input_a = {}, input_b = {}, carry = {}, sum = {}".format(self.input_a, self.input_b, self.sum, self.carry)
+        return "HalfAdder: " + super(HalfAdder, self).__str__()
 
-class FullAdder(Base, ThreeInputMixin, SumCarryOuputMixin):
+class FullAdder(Interface, ThreeInputMixin, SumCarryOuputMixin):
     def __init__(self):
         ha1 = HalfAdder()
         ha2 = HalfAdder()
         o = Or()
 
         #create inputs
-        input_a = ha1.input_a
-        input_b = ha1.input_b
-        input_c = ha2.input_b
-        inputs = [input_a, input_b, input_c]
+        inputs = {}
+        inputs["input_a"] = ha1.input_a
+        inputs["input_b"] = ha1.input_b
+        inputs["input_c"] = ha2.input_b
 
         #connect ha1 carry to ha2 input_a
         ha1.sum.connect(ha2.input_a)
@@ -43,16 +44,16 @@ class FullAdder(Base, ThreeInputMixin, SumCarryOuputMixin):
         ha2.carry.connect(o.input_b)
 
         #connect the outputs
-        thesum = ha2.sum
-        carry = o.output
-        outputs = [thesum, carry]
+        outputs = {}
+        outputs["sum"] = ha2.sum
+        outputs["carry"] = o.output
 
         super(FullAdder, self).__init__(inputs, outputs)
 
     def __str__(self):
-        return "FullAdder: input_a = {}, input_b = {}, input_c = {}, carry = {}, sum = {}".format(self.input_a, self.input_b, self.input_c, self.sum, self.carry)
+        return "FullAdder: " + super(FullAdder, self).__str__()
 
-class EightBitRippleCarryAdder(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+class EightBitRippleCarryAdder(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
     def __init__(self):
         ha = HalfAdder()
         fa1 = FullAdder()
@@ -64,13 +65,13 @@ class EightBitRippleCarryAdder(Base, TwoEightBitInputMixin, OneEightBitSumOneCar
         fa7 = FullAdder()
         
         #wire up outputs and inputs
-        input_a = [ha.input_a, fa1.input_b, fa2.input_b, fa3.input_b, fa4.input_b, fa5.input_b, fa6.input_b, fa7.input_b]
-        input_b = [ha.input_b, fa1.input_c, fa2.input_c, fa3.input_c, fa4.input_c, fa5.input_c, fa6.input_c, fa7.input_c]
-        inputs = [input_a, input_b]
-
-        output_sum = [ha.sum, fa1.sum, fa2.sum, fa3.sum, fa4.sum, fa5.sum, fa6.sum, fa7.sum]
-        output_carry = fa7.carry
-        outputs = [output_sum, output_carry]
+        inputs = {}
+        inputs["input_a"] = [ha.input_a, fa1.input_b, fa2.input_b, fa3.input_b, fa4.input_b, fa5.input_b, fa6.input_b, fa7.input_b]
+        inputs["input_b"] = [ha.input_b, fa1.input_c, fa2.input_c, fa3.input_c, fa4.input_c, fa5.input_c, fa6.input_c, fa7.input_c]
+        
+        outputs = {}
+        outputs["sum"] = [ha.sum, fa1.sum, fa2.sum, fa3.sum, fa4.sum, fa5.sum, fa6.sum, fa7.sum]
+        outputs["carry"] = fa7.carry
 
         #connect up adders
         ha.carry.connect(fa1.input_a)
@@ -83,7 +84,10 @@ class EightBitRippleCarryAdder(Base, TwoEightBitInputMixin, OneEightBitSumOneCar
 
         super(EightBitRippleCarryAdder, self).__init__(inputs, outputs)
 
-class EightBitRippleCarryAdderSubtractor(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+    def __str__(self):
+        return "EightBitRippleCarryAdder: inputs = {{input_a = {}, input_b = {}}}, outputs = {{sum = {}, carry = {}}}".format(self.input_a, self.input_b, self.sum, self.carry)
+
+class EightBitRippleCarryAdderSubtractor(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
     def __init__(self):
         fa0 = FullAdder()
         fa1 = FullAdder()
@@ -107,15 +111,15 @@ class EightBitRippleCarryAdderSubtractor(Base, TwoEightBitInputMixin, OneEightBi
         op_split = Split(fa0.input_a, xo0.input_a, xo1.input_a, xo2.input_a, xo3.input_a, xo4.input_a, xo5.input_a, xo6.input_a, xo7.input_a)
 
         #wire up outputs and inputs
-        op = op_split.input
-        input_a = [fa0.input_b, fa1.input_b, fa2.input_b, fa3.input_b, fa4.input_b, fa5.input_b, fa6.input_b, fa7.input_b]
-        input_b = [xo0.input_b, xo1.input_b, xo2.input_b, xo3.input_b, xo4.input_b, xo5.input_b, xo6.input_b, xo7.input_b]
-        inputs = [input_a, input_b, op]
-
-        output_sum = [fa0.sum, fa1.sum, fa2.sum, fa3.sum, fa4.sum, fa5.sum, fa6.sum, fa7.sum]
-        output_carry = fa7.carry
-        outputs = [output_sum, output_carry]
-
+        inputs = {}
+        inputs["operator"] = op_split.input
+        inputs["input_a"] = [fa0.input_b, fa1.input_b, fa2.input_b, fa3.input_b, fa4.input_b, fa5.input_b, fa6.input_b, fa7.input_b]
+        inputs["input_b"] = [xo0.input_b, xo1.input_b, xo2.input_b, xo3.input_b, xo4.input_b, xo5.input_b, xo6.input_b, xo7.input_b]
+        
+        outputs = {}
+        outputs["sum"] = [fa0.sum, fa1.sum, fa2.sum, fa3.sum, fa4.sum, fa5.sum, fa6.sum, fa7.sum]
+        outputs["carry"] = fa7.carry
+        
         #connect xors to adders
         xo0.output.connect(fa0.input_c)
         xo1.output.connect(fa1.input_c)
@@ -139,9 +143,13 @@ class EightBitRippleCarryAdderSubtractor(Base, TwoEightBitInputMixin, OneEightBi
 
     @property
     def operator(self):
-        return self.inputs[2]
+        return self.inputs["operator"]
 
-class ALU(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
+    def __str__(self):
+        return "EightBitRippleCarryAdderSubtractor: inputs = {{input_a = {}, input_b = {}, operator = {}}}, outputs = {{sum = {}, carry = {}}}".format(self.input_a, self.input_b, self.operator, self.sum, self.carry)
+
+
+class ALU(Interface, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
     def __init__(self):
         """
         Truth table for overflow
@@ -169,7 +177,11 @@ class ALU(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
         op_split = Split(rcas.operator, overflow_xor.input_a, neg_and.input_a)
         op = op_split.input
         
-        inputs = [rcas.input_a.bits, rcas.input_b.bits, op]
+        inputs = {}
+        inputs["input_a"] = rcas.input_a.bits
+        inputs["input_b"] = rcas.input_b.bits
+        inputs["operator"] = op
+#        inputs = [rcas.input_a.bits, rcas.input_b.bits, op]
 
         #carry output
         #send the rcas carry to the carry output and the overflow xor
@@ -186,10 +198,14 @@ class ALU(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
         #negative output
         negative = neg_and.output
 
-        outputs = [rcas.sum.bits, rcas.carry, overflow, negative]
+        outputs = {}
+        outputs["sum"] = rcas.sum.bits
+        outputs["carry"] = rcas.carry
+        outputs["overflow"] = overflow
+        outputs["negative"] = negative
+        #outputs = [rcas.sum.bits, rcas.carry, overflow, negative]
 
         super(ALU, self).__init__(inputs, outputs)
-
 
     #inputs
     @property
@@ -198,12 +214,12 @@ class ALU(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
         '0' - addition
         '1' - subtraction
         """
-        return self.inputs[2]
+        return self.inputs["operator"]
     
     #output flags    
     @property
     def overflow(self):
-        return self.outputs[2]
+        return self.outputs["overflow"]
 
     @property
     def negative(self):
@@ -211,4 +227,7 @@ class ALU(Base, TwoEightBitInputMixin, OneEightBitSumOneCarryOutputMixin):
         '0' - positive
         '1' - negative
         """
-        return self.outputs[3]
+        return self.outputs["negative"]
+
+    def __str__(self):
+        return "ALU: inputs = {{input_a = {}, input_b = {}, operator = {}}}, outputs = {{sum = {}, carry = {}, overflow = {}, negative = {}}}".format(self.input_a, self.input_b, self.operator, self.sum, self.carry, self.overflow, self.negative)

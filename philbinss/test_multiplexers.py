@@ -3,6 +3,7 @@ from multiplexers import TwoToOneMultiplexer, FourToOneMultiplexer, TwoToFourDec
 
 def test_twotoonemultiplexer():
     mp = TwoToOneMultiplexer()
+    _str = mp.__str__()
 
     in1 = Power()
     in2 = Power()
@@ -36,6 +37,7 @@ def test_twotoonemultiplexer():
 
 def test_fourtoonemultiplexer():
     mp = FourToOneMultiplexer()
+    _str = mp.__str__()
 
     in1 = Power()
     in2 = Power()
@@ -81,6 +83,7 @@ def test_fourtoonemultiplexer():
 
 def test_twotofourdecoder():
     dc = TwoToFourDecoder()
+    _str = dc.__str__()
 
     in1 = Power()
     in2 = Power()
