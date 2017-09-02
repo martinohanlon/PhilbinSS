@@ -1,13 +1,23 @@
 from guizero import App, CheckBox, Text, Combo, Box
 from logicgates import Not, And, Or, Xor
 from components import Power
-from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder
+from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder, EightBitRippleCarryAdderSubtractor, ALU
 
 class ControlPanel():
     def __init__(self):
-        self.components = {"AND": And, "OR": Or, "XOR": Xor, "NOT": Not, "Half Adder": HalfAdder, "Full Adder": FullAdder}
+        self.components = {
+            "AND": And, 
+            "OR": Or, 
+            "XOR": Xor, 
+            "NOT": Not, 
+            "Half Adder": HalfAdder, 
+            "Full Adder": FullAdder, 
+            "8 bit Ripple Carry Adder": EightBitRippleCarryAdder,
+            "8 bit Ripple Carry Adder Subtractor": EightBitRippleCarryAdderSubtractor,
+            "ALU": ALU,
+            }
 
-        self.app = App(title = "Philbin Silicon Simulator", layout = "grid")
+        self.app = App(title = "Philbin SS Control Panel", layout = "grid")
         self.box_component = Box(self.app, grid = [0,1])
         
         self.combo = Combo(self.box_component, options = list(self.components.keys()), command = self.reload_component)
@@ -30,19 +40,39 @@ class ControlPanel():
         #for i in range(len(self.component.inputs)):
         i = 0
         for input_key in self.component.inputs:
-            p = Power()
-            p.connect(self.component.inputs[input_key])
-            self.input_power.append(p)
-            self.input_checks.append(CheckBox(self.box_inputs, text = input_key, grid=[i,0], command=self.update_values))
-            i += 1
+            #is this input a list of inputs?
+            if isinstance(self.component.inputs[input_key], list):
+                s = 0
+                for sub_input in self.component.inputs[input_key]:
+                    p = Power()
+                    p.connect(sub_input)
+                    self.input_power.append(p)
+                    self.input_checks.append(CheckBox(self.box_inputs, text = input_key + ":" + str(s), grid=[i,0], command=self.update_values))
+                    s += 1
+                    i += 1
+            else:
+                p = Power()
+                p.connect(self.component.inputs[input_key])
+                self.input_power.append(p)
+                self.input_checks.append(CheckBox(self.box_inputs, text = input_key, grid=[i,0], command=self.update_values))
+                i += 1
 
         #setup the outputs
         o = 0
         for output_key in self.component.outputs:
-            output_check = CheckBox(self.box_outputs, text = output_key, grid=[o,2])
-            output_check.configure(state = "disabled")
-            self.output_checks.append(output_check)
-            o += 1
+            if isinstance(self.component.outputs[output_key], list):
+                s = 0
+                for sub_output in self.component.outputs[output_key]:
+                    output_check = CheckBox(self.box_outputs, text = output_key + ":" + str(s), grid=[o,2])
+                    output_check.configure(state = "disabled")
+                    self.output_checks.append(output_check)
+                    s += 1
+                    o += 1
+            else:
+                output_check = CheckBox(self.box_outputs, text = output_key, grid=[o,2])
+                output_check.configure(state = "disabled")
+                self.output_checks.append(output_check)
+                o += 1
 
         self.update_values()
 
@@ -55,11 +85,19 @@ class ControlPanel():
         #for o in range(len(self.component.outputs)):
         o = 0
         for output_key in self.component.outputs:
-            if self.component.outputs[output_key].value:
-                self.output_checks[o].select()
+            if isinstance(self.component.outputs[output_key], list):
+                for sub_output in self.component.outputs[output_key]:
+                    if sub_output.value:
+                        self.output_checks[o].select()
+                    else:
+                        self.output_checks[o].deselect()
+                    o += 1
             else:
-                self.output_checks[o].deselect()
-            o += 1
+                if self.component.outputs[output_key].value:
+                    self.output_checks[o].select()
+                else:
+                    self.output_checks[o].deselect()
+                o += 1
 
     def reload_component(self,x):
         self.box_inputs.destroy()
