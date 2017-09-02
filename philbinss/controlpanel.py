@@ -2,6 +2,8 @@ from guizero import App, CheckBox, Text, Combo, Box
 from logicgates import Not, And, Or, Xor
 from components import Power
 from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder, EightBitRippleCarryAdderSubtractor, ALU
+from multiplexers import TwoToOneMultiplexer, FourToOneMultiplexer, TwoToFourDecoder
+from memory import AndOrLatch, GatedLatch, RAMCell, EightBitRegister
 
 class ControlPanel():
     def __init__(self):
@@ -15,6 +17,13 @@ class ControlPanel():
             "8 bit Ripple Carry Adder": EightBitRippleCarryAdder,
             "8 bit Ripple Carry Adder Subtractor": EightBitRippleCarryAdderSubtractor,
             "ALU": ALU,
+            "2 to 1 Multiplexer": TwoToOneMultiplexer,
+            "4 to 1 Multiplexer": FourToOneMultiplexer,
+            "2 to 4 Decoder": TwoToFourDecoder,
+            "And Or Latch": AndOrLatch,
+            "Gated Latch": GatedLatch,
+            "RAM Cell": RAMCell,
+            "Eight Bit Register": EightBitRegister,
             }
 
         self.app = App(title = "Philbin SS Control Panel", layout = "grid")
