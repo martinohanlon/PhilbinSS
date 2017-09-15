@@ -1,5 +1,5 @@
 from components import Power
-from memory import AndOrLatch, GatedLatch, EightBitRegister, RAMCell
+from memory import AndOrLatch, GatedLatch, EightBitRegister, RAMCell, SixteenBitMemory
 from random import getrandbits
 
 def test_andorlatch():
@@ -242,11 +242,15 @@ def test_ramcell():
     assert not rc.data_in.value 
     assert not rc.data_out.value 
 
+def test_sixteenbitmemory():
+    mem = SixteenBitMemory()
+
 def run_tests():
     test_andorlatch()
     test_gatedlatch()    
     test_eightbitregister()
     test_ramcell()
+    test_sixteenbitmemory()
 
     print("memory - all tests run")
 
