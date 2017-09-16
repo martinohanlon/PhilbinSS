@@ -258,10 +258,8 @@ def test_sixteenbitmemory():
 
     input_data = Power()
     input_data.connect(mem.data_in)
-
     input_write = Power()
     input_write.connect(mem.write_enable)
-
     input_read = Power()
     input_read.connect(mem.read_enable)
 
