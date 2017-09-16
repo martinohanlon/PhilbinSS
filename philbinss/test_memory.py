@@ -1,3 +1,4 @@
+import itertools
 from components import Power
 from memory import AndOrLatch, GatedLatch, EightBitRegister, RAMCell, SixteenBitMemory
 from random import getrandbits
@@ -94,7 +95,7 @@ def test_eightbitregister():
     reg = EightBitRegister()
     _str = reg.__str__()
 
-    #create input power switches and connect up ripple carry adder
+    #create input power switches and connect up the register
     inputs_data = []
     
     for i in range(8):
@@ -242,8 +243,77 @@ def test_ramcell():
     assert not rc.data_in.value 
     assert not rc.data_out.value 
 
+def get_binary_states(no_inputs):
+    return list(itertools.product(*[(False, True)] * no_inputs))
+
 def test_sixteenbitmemory():
     mem = SixteenBitMemory()
+    
+    # create input power switches and connect up 
+    inputs_address = []
+    for i in range(4):
+        input_bit = Power()
+        input_bit.connect(mem.address.get_bit(i))
+        inputs_address.append(input_bit)
+
+    input_data = Power()
+    input_data.connect(mem.data_in)
+
+    input_write = Power()
+    input_write.connect(mem.write_enable)
+
+    input_read = Power()
+    input_read.connect(mem.read_enable)
+
+    # test that you can only read and write when enabled
+
+    # test - its not written
+    input_data.on()
+    assert not mem.data_out.value
+
+    # write a value
+    input_write.on()
+    input_write.off()
+
+    # test - its not being read
+    assert not mem.data_out.value
+
+    # test - that it can be read
+    input_read.on()
+    assert mem.data_out.value
+
+    input_read.off()
+    input_data.off()
+
+    # get all possible addresses
+    addresses = get_binary_states(4)
+
+    #write random values to memory addresses
+    test_values = []
+    for address in addresses:
+        inputs_address[0].value = address[0]        
+        inputs_address[1].value = address[1]
+        inputs_address[2].value = address[2]
+        inputs_address[3].value = address[3]
+        test_value = bool(getrandbits(1))
+        input_write.on()
+        input_data.value = test_value
+        input_write.off()
+        test_values.append(test_value)
+
+    input_data.off()
+
+    #read values from memory and check they match
+    a = 0
+    for address in addresses:
+        inputs_address[0].value = address[0]        
+        inputs_address[1].value = address[1]
+        inputs_address[2].value = address[2]
+        inputs_address[3].value = address[3]
+        input_read.on()
+        assert mem.data_out.value == test_values[a]
+        input_read.off()
+        a += 1
 
 def run_tests():
     test_andorlatch()

@@ -1,4 +1,4 @@
-from interfaces import Interface
+from interfaces import Interface, FourBit
 from primitives import Cathode
 from components import Split, Join, Transistor
 from logicgates import Or, Not, And
@@ -146,25 +146,42 @@ class RAMCell(Interface):
 class SixteenBitMemory(Interface):
     def __init__(self):
 
-        #create the memory address
+        # create the memory address
         col_decoder = TwoToFourDecoder()
         row_decoder = TwoToFourDecoder()
-        address = [col_decoder.input_a, col_decoder.input_b, row_decoder.input_a, row_decoder.input_b]
+        address = [row_decoder.input_a, row_decoder.input_b, col_decoder.input_a, col_decoder.input_b]
         
         write_enable = Split()
         read_enable = Split()
         data_in = Split()
         data_out = Join()
 
-        #create ram cells in a matrix
+        # create ram cells in a matrix
+        # create splits for the address
+        row_a_split = Split()
+        row_b_split = Split()
+        row_c_split = Split()
+        row_d_split = Split()
+        row_decoder.output_a.connect(row_a_split.input)
+        row_decoder.output_b.connect(row_b_split.input)
+        row_decoder.output_c.connect(row_c_split.input)
+        row_decoder.output_d.connect(row_d_split.input)
+
+        col_a_split = Split()
+        col_b_split = Split()
+        col_c_split = Split()
+        col_d_split = Split()
+        col_decoder.output_a.connect(col_a_split.input)
+        col_decoder.output_b.connect(col_b_split.input)
+        col_decoder.output_c.connect(col_c_split.input)
+        col_decoder.output_d.connect(col_d_split.input)
+
+        address_row_outputs = [row_a_split, row_b_split, row_c_split, row_d_split]
+        address_col_outputs = [col_a_split, col_b_split, col_c_split, col_d_split]
         
-        #TODO - need to create splits for all outputs
-        address_row_outputs = [row_decoder.output_a, row_decoder.output_b, row_decoder.output_c, row_decoder.output_d]
-        address_col_outputs = [col_decoder.output_a, col_decoder.output_b, col_decoder.output_c, col_decoder.output_d]
-        
-        for row in range(3):
-            for col in range(3):
-                #create a ram cell and write it up
+        for row in range(4):
+            for col in range(4):
+                # create a ram cell and write it up
                 ram_cell = RAMCell()
                 address_row_outputs[row].connect(ram_cell.row)
                 address_col_outputs[col].connect(ram_cell.col)
@@ -172,9 +189,6 @@ class SixteenBitMemory(Interface):
                 write_enable.connect(ram_cell.write_enable)
                 data_in.connect(ram_cell.data_in)
                 data_out.connect(ram_cell.data_out)
-
-                #stick the ram cell in a list.
-                #ram_cells[row][col] = ram_cell
 
         inputs = {}
         inputs["address"] = address
@@ -185,7 +199,27 @@ class SixteenBitMemory(Interface):
         outputs = {}
         outputs["data_out"] = data_out.output
 
-        super(SixteenBitMemoryMatrix, self).__init__(inputs, outputs)
+        super(SixteenBitMemory, self).__init__(inputs, outputs)
+
+    @property
+    def address(self):
+        return FourBit(self.inputs["address"])
+
+    @property
+    def write_enable(self):
+        return self.inputs["write_enable"]
+
+    @property
+    def read_enable(self):
+        return self.inputs["read_enable"]
+
+    @property
+    def data_in(self):
+        return self.inputs["data_in"]
+
+    @property
+    def data_out(self):
+        return self.outputs["data_out"]
 
 class EightBitRegister(Interface, InputDataEightBitMixin, InputWriteMixin, OutputEightBitMixin):
     def __init__(self):
