@@ -1,6 +1,6 @@
 import itertools
 from components import Power
-from memory import AndOrLatch, GatedLatch, EightBitRegister, RAMCell, SixteenBitMemory
+from memory import AndOrLatch, GatedLatch, EightBitRegister, RAMCell, SixteenBitMemory, SixteenByteMemory
 from random import getrandbits
 
 def test_andorlatch():
@@ -313,12 +313,16 @@ def test_sixteenbitmemory():
         input_read.off()
         a += 1
 
+def test_sixteenbytememory():
+    mem = SixteenByteMemory()
+
 def run_tests():
     test_andorlatch()
     test_gatedlatch()    
     test_eightbitregister()
     test_ramcell()
     test_sixteenbitmemory()
+    test_sixteenbytememory()
 
     print("memory - all tests run")
 

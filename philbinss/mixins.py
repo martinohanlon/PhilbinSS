@@ -50,6 +50,11 @@ class InputDataEightBitMixin(object):
     def data(self):
         return EightBit(self._inputs["data"])
 
+class InputDataInEightBitMixin(object):
+    @property
+    def data(self):
+        return EightBit(self._inputs["data_in"])
+
 class InputAEightBitMixin(object):
     @property
     def input_a(self):
@@ -129,6 +134,11 @@ class OutputEightBitMixin(object):
     @property
     def output(self):
         return EightBit(self._outputs["output"])
+
+class OutputDataOutEightBitMixin(object):
+    @property
+    def output(self):
+        return EightBit(self._outputs["data_out"])
 
 class OutputSumEightBitMixin(object):
     @property

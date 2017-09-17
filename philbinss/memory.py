@@ -3,7 +3,7 @@ from primitives import Cathode
 from components import Split, Join, Transistor
 from logicgates import Or, Not, And
 from multiplexers import TwoToFourDecoder
-from mixins import InputSetMixin, InputResetMixin, InputDataMixin, InputWriteMixin, InputDataEightBitMixin, InputWriteMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInMixin, InputAddressFourBitMixin, OutputMixin, OutputEightBitMixin, OutputDataOutMixin
+from mixins import InputSetMixin, InputResetMixin, InputDataMixin, InputWriteMixin, InputDataEightBitMixin, InputDataInEightBitMixin, InputWriteMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInMixin, InputAddressFourBitMixin, OutputMixin, OutputEightBitMixin, OutputDataOutMixin, OutputDataOutEightBitMixin
 
 class AndOrLatch(Interface, InputSetMixin, InputResetMixin, OutputMixin):
     def __init__(self):
@@ -184,6 +184,41 @@ class SixteenBitMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixi
         outputs["data_out"] = data_out.output
 
         super(SixteenBitMemory, self).__init__(inputs, outputs)
+
+class SixteenByteMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInEightBitMixin, OutputDataOutMixin, OutputDataOutEightBitMixin):
+    
+    def __init__(self):
+        # create 8 16 bit memory modules and chain them together
+        address_splits = [Split(), Split(), Split(), Split()]
+        write_split = Split()
+        read_split = Split()
+
+        data_out = []
+        data_in = []
+
+        # create and connect up the 16 bit memory modules
+        for i in range(8):
+            bit = SixteenBitMemory()
+            # connect up the address
+            for j in range(4):
+                address_splits[j].connect(bit.address.get_bit(j))
+            # connect write and read enable 
+            write_split.connect(bit.write_enable)
+            read_split.connect(bit.read_enable)
+            # create lists for data in and out
+            data_out.append(bit.data_out)
+            data_in.append(bit.data_in)
+
+        inputs = {}
+        inputs["address"] = [address_splits[0].input, address_splits[1].input, address_splits[2].input, address_splits[3].input]
+        inputs["write_enable"] = write_split.input
+        inputs["read_enable"] = read_split.input
+        inputs["data_in"] = data_in
+
+        outputs = {}
+        outputs["data_out"] = data_out
+
+        super(SixteenByteMemory, self).__init__(inputs, outputs)
 
 class EightBitRegister(Interface, InputDataEightBitMixin, InputWriteMixin, OutputEightBitMixin):
     def __init__(self):
