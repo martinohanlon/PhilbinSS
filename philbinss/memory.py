@@ -1,9 +1,9 @@
-from interfaces import Interface, FourBit
+from interfaces import Interface
 from primitives import Cathode
 from components import Split, Join, Transistor
 from logicgates import Or, Not, And
 from multiplexers import TwoToFourDecoder
-from mixins import InputSetMixin, InputResetMixin, InputDataMixin, InputWriteMixin, InputDataEightBitMixin, InputWriteMixin, OutputMixin, OutputEightBitMixin
+from mixins import InputSetMixin, InputResetMixin, InputDataMixin, InputWriteMixin, InputDataEightBitMixin, InputWriteMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInMixin, InputAddressFourBitMixin, OutputMixin, OutputEightBitMixin, OutputDataOutMixin
 
 class AndOrLatch(Interface, InputSetMixin, InputResetMixin, OutputMixin):
     def __init__(self):
@@ -77,7 +77,7 @@ class GatedLatch(Interface, InputDataMixin, InputWriteMixin, OutputMixin):
     def __str__(self):
         return "Gated Latch: " + super(GatedLatch, self).__str__()
         
-class RAMCell(Interface):
+class RAMCell(Interface, InputWriteEnableMixin, InputReadEnableMixin, InputDataInMixin, OutputDataOutMixin):
     def __init__(self):
         a1 = And()
         a2 = And()
@@ -124,26 +124,10 @@ class RAMCell(Interface):
     def col(self):
         return self.inputs["col"]
 
-    @property
-    def write_enable(self):
-        return self.inputs["write_enable"]
-
-    @property
-    def read_enable(self):
-        return self.inputs["read_enable"]
-
-    @property
-    def data_in(self):
-        return self.inputs["data_in"]
-
-    @property
-    def data_out(self):
-        return self.outputs["data_out"]
-
     def __str__(self):
         return "RAM Cell: " + super(RAMCell, self).__str__()
 
-class SixteenBitMemory(Interface):
+class SixteenBitMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInMixin, OutputDataOutMixin):
     def __init__(self):
 
         # create the memory address
@@ -200,26 +184,6 @@ class SixteenBitMemory(Interface):
         outputs["data_out"] = data_out.output
 
         super(SixteenBitMemory, self).__init__(inputs, outputs)
-
-    @property
-    def address(self):
-        return FourBit(self.inputs["address"])
-
-    @property
-    def write_enable(self):
-        return self.inputs["write_enable"]
-
-    @property
-    def read_enable(self):
-        return self.inputs["read_enable"]
-
-    @property
-    def data_in(self):
-        return self.inputs["data_in"]
-
-    @property
-    def data_out(self):
-        return self.outputs["data_out"]
 
 class EightBitRegister(Interface, InputDataEightBitMixin, InputWriteMixin, OutputEightBitMixin):
     def __init__(self):

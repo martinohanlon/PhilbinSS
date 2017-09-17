@@ -1,4 +1,4 @@
-from interfaces import EightBit
+from interfaces import FourBit, EightBit
 
 class InputMixin(object):
     @property
@@ -65,10 +65,30 @@ class InputWriteMixin(object):
     def write(self):
         return self._inputs["write"]
 
+class InputWriteEnableMixin(object):
+    @property
+    def write_enable(self):
+        return self.inputs["write_enable"]
+
+class InputReadEnableMixin(object):
+    @property
+    def read_enable(self):
+        return self.inputs["read_enable"]
+
+class InputDataInMixin(object):
+    @property
+    def data_in(self):
+        return self.inputs["data_in"]
+
 class InputOperatorMixin(object):
     @property
     def operator(self):
         return self._inputs["operator"]
+
+class InputAddressFourBitMixin(object):
+    @property
+    def address(self):
+        return FourBit(self.inputs["address"])
 
 class OutputMixin(object):
     @property
@@ -114,3 +134,8 @@ class OutputSumEightBitMixin(object):
     @property
     def sum(self):
         return EightBit(self._outputs["sum"])
+
+class OutputDataOutMixin(object):
+    @property
+    def data_out(self):
+        return self.outputs["data_out"]
