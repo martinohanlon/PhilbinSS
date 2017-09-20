@@ -41,18 +41,6 @@ class MultiBit(object):
     def bits(self):
         return self._bits
 
-    def set_bit(self, bit, value):
-        self._bits[bit] = value
-
-    def get_bit(self, bit):
-        return self._bits[bit]
-
-    def get_binary(self):
-        binary_value = ""
-        for bit in self._bits:
-            binary_value += "1" if bit.value else "0"
-        return binary_value
-
     @property
     def length(self):
         return(len(self._bits))
@@ -60,6 +48,25 @@ class MultiBit(object):
     @property
     def binary_value(self):
         return self.get_binary()
+
+    @property
+    def int_value(self):
+        """
+        Returns the integer value of the bits - useful for testing
+        """
+        return self.get_int()
+
+    def get_bit(self, bit):
+        return self._bits[bit]
+
+    def set_bit(self, bit, value):
+        self._bits[bit] = value
+
+    def get_binary(self):
+        binary_value = ""
+        for bit in self._bits:
+            binary_value += "1" if bit.value else "0"
+        return binary_value
 
     def get_int(self):
         #there must be a better way of converting binary to int
@@ -72,12 +79,17 @@ class MultiBit(object):
         
         return int_value
 
-    @property
-    def int_value(self):
+    def connect(self, multi_bit):
         """
-        Returns the integer value of the bits - useful for testing
+        Connect all the nodes in this multi bit interface to another multi bit interface
+
+        multi_bit: the multi_bit to connect too 
         """
-        return self.get_int()
+        if self.length != multi_bit.length:
+            raise ValueError("expect {} bits - {} given".format(self.length, multi_bit.length))
+
+        for i in range(self.length):
+            self.bits[i].connect(multi_bit.bits[i])
 
     def __str__(self):
         return "{} bit(binary = {}, int = {})".format(self.length, self.binary_value, self.int_value)

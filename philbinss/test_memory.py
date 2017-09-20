@@ -313,8 +313,53 @@ def test_sixteenbitmemory():
         input_read.off()
         a += 1
 
+def get_eight_bit_switch(eight_bit_input):
+    switches = []
+
+    for i in range(8):
+        power_bit = Power()
+        power_bit.connect(eight_bit_input.get_bit(i))        
+        switches.append(power_bit)
+
+    return switches
+
 def test_sixteenbytememory():
     mem = SixteenByteMemory()
+
+    # create input power switches and connect up 
+    inputs_address = []
+    for i in range(4):
+        input_bit = Power()
+        input_bit.connect(mem.address.get_bit(i))
+        inputs_address.append(input_bit)
+
+    inputs_data = get_eight_bit_switch(mem.data_in)
+
+    input_write = Power()
+    input_write.connect(mem.write_enable)
+
+    input_read = Power()
+    input_read.connect(mem.read_enable)
+
+    # test that you can only read and write when enabled
+
+    # test - its not written
+    inputs_data[0].on()
+    assert mem.data_out.int_value == 0
+
+    # write a value
+    input_write.on()
+    input_write.off()
+
+    # test - its not being read
+    assert mem.data_out.int_value == 0
+    
+    # test - that it can be read
+    input_read.on()
+    assert mem.data_out.int_value == 1
+
+    input_read.off()
+    inputs_data[0].off()
 
 def run_tests():
     test_andorlatch()

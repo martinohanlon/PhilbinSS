@@ -185,7 +185,7 @@ class SixteenBitMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixi
 
         super(SixteenBitMemory, self).__init__(inputs, outputs)
 
-class SixteenByteMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInEightBitMixin, OutputDataOutMixin, OutputDataOutEightBitMixin):
+class SixteenByteMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInEightBitMixin, OutputDataOutEightBitMixin):
     
     def __init__(self):
         # create 8 16 bit memory modules and chain them together
