@@ -185,6 +185,10 @@ class SixteenBitMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixi
 
         super(SixteenBitMemory, self).__init__(inputs, outputs)
 
+    def __str__(self):
+        return "Sixteen Bit Memory: " + super(SixteenBitMemory, self).__str__()
+
+
 class SixteenByteMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInEightBitMixin, OutputDataOutEightBitMixin):
     
     def __init__(self):
@@ -219,6 +223,9 @@ class SixteenByteMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMix
         outputs["data_out"] = data_out
 
         super(SixteenByteMemory, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "Sixteen Byte Memory: " + super(SixteenBitMemory, self).__str__()
 
 class EightBitRegister(Interface, InputDataEightBitMixin, InputWriteMixin, OutputEightBitMixin):
     def __init__(self):

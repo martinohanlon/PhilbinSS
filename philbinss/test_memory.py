@@ -1,4 +1,5 @@
 import itertools
+from interfaces import EightBit
 from components import Power
 from memory import AndOrLatch, GatedLatch, EightBitRegister, RAMCell, SixteenBitMemory, SixteenByteMemory
 from random import getrandbits
@@ -248,6 +249,7 @@ def get_binary_states(no_inputs):
 
 def test_sixteenbitmemory():
     mem = SixteenBitMemory()
+    _str = mem.__str__()
     
     # create input power switches and connect up 
     inputs_address = []
@@ -360,6 +362,40 @@ def test_sixteenbytememory():
 
     input_read.off()
     inputs_data[0].off()
+
+    # get all possible addresses
+    addresses = get_binary_states(4)
+
+    # write random values to memory addresses
+    test_values = []
+    for address in addresses:
+        inputs_address[0].value = address[0]        
+        inputs_address[1].value = address[1]
+        inputs_address[2].value = address[2]
+        inputs_address[3].value = address[3]
+        
+        # create a random 8 bit value
+        input_write.on()
+        test_value = []
+        for i in range(8):
+            bit = bool(getrandbits(1))
+            inputs_data[i].value = bit
+            test_value.append(bit)
+        input_write.off()
+        test_values.append(test_value)
+
+    #read values from memory and check they match
+    a = 0
+    for address in addresses:
+        inputs_address[0].value = address[0]        
+        inputs_address[1].value = address[1]
+        inputs_address[2].value = address[2]
+        inputs_address[3].value = address[3]
+        input_read.on()
+        for i in range(8):
+            assert mem.data_out.bits[i].value == test_values[a][i]
+        input_read.off()
+        a += 1
 
 def run_tests():
     test_andorlatch()
