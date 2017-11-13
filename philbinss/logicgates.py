@@ -65,6 +65,28 @@ class Or(Interface, InputAMixin, InputBMixin, OutputMixin):
     def __str__(self):
         return "Or: " + super(Or, self).__str__()
 
+class Nor(Interface, InputAMixin, InputBMixin, OutputMixin):
+    """
+    The implementation of a Nor gate, it accepts a two inputs and has a single output 
+    """
+    def __init__(self):
+        o = Or()
+        n = Not()
+
+        inputs = {}
+        inputs["input_a"] = o.input_a
+        inputs["input_b"] = o.input_b
+        
+        o.output.connect(n.input)
+        
+        outputs = {}
+        outputs["output"] = n.output
+        
+        super(Nor, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "Nor: " + super(Nor, self).__str__()
+
 class Xor(Interface, InputAMixin, InputBMixin, OutputMixin):
     """
     The implementation of an Xor gate, it accepts a two inputs and has a single output 

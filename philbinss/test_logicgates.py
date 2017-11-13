@@ -1,6 +1,6 @@
 import itertools
 from components import Power
-from logicgates import Not, And, Or, Xor
+from logicgates import Nor, Not, And, Or, Xor
 import operator
 
 def logic_gate_test(logic_gate, op):
@@ -32,6 +32,9 @@ def logic_gate_test(logic_gate, op):
 def get_binary_states(no_inputs):
     return list(itertools.product(*[(False, True)] * no_inputs))
 
+def operator_nor(*inputs):
+    return True if not (inputs[0] or inputs[1]) else False
+
 def test_not():
     logic_gate_test(Not(), operator.__not__)
 
@@ -43,12 +46,16 @@ def test_or():
 
 def test_xor():
     logic_gate_test(Xor(), operator.__xor__)
-    
+
+def test_nor():
+    logic_gate_test(Nor(), operator_nor)
+
 def run_tests():
     test_not()
     test_or()
     test_and()
     test_xor()
+    test_nor()
     print("logicgates - all tests run")
     
 run_tests()
