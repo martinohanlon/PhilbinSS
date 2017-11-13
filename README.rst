@@ -324,8 +324,11 @@ Links
 The following sites have been really useful in providing background information, tutorials and images.
 
 `Crash Course Computer Science`_
+
 `www.electronics-tutorials.ws`_
+
 `electronics.stackexchange.com`_
+
 `www.allaboutcircuits.com`_
 
 `Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
