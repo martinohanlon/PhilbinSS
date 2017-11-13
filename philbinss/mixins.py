@@ -25,6 +25,16 @@ class InputDMixin(object):
     def input_d(self):
         return self._inputs["input_d"]
 
+class InputJMixin(object):
+    @property
+    def input_j(self):
+        return self._inputs["input_j"]
+
+class InputKMixin(object):
+    @property
+    def input_k(self):
+        return self._inputs["input_k"]
+
 class InputSetMixin(object):
     @property
     def set(self):
@@ -95,6 +105,11 @@ class InputAddressFourBitMixin(object):
     def address(self):
         return FourBit(self.inputs["address"])
 
+class InputClockMixin(object):
+    @property
+    def clock(self):
+        return self._inputs["clock"]
+
 class OutputMixin(object):
     @property
     def output(self):
@@ -149,3 +164,14 @@ class OutputDataOutMixin(object):
     @property
     def data_out(self):
         return self.outputs["data_out"]
+
+class OutputQ_Mixin(object):
+    @property
+    def output_q_(self):
+        return self._outputs["output_q_"]
+
+class OutputQMixin(object):
+    @property
+    def output_q(self):
+        return self._outputs["output_q"]
+

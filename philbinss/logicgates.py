@@ -87,6 +87,28 @@ class Nor(Interface, InputAMixin, InputBMixin, OutputMixin):
     def __str__(self):
         return "Nor: " + super(Nor, self).__str__()
 
+class Nand(Interface, InputAMixin, InputBMixin, OutputMixin):
+    """
+    The implementation of a Nand gate, it accepts a two inputs and has a single output 
+    """
+    def __init__(self):
+        a = And()
+        n = Not()
+
+        inputs = {}
+        inputs["input_a"] = a.input_a
+        inputs["input_b"] = a.input_b
+        
+        o.output.connect(n.input)
+        
+        outputs = {}
+        outputs["output"] = n.output
+        
+        super(Nand, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "Nand: " + super(Nand, self).__str__()
+
 class Xor(Interface, InputAMixin, InputBMixin, OutputMixin):
     """
     The implementation of an Xor gate, it accepts a two inputs and has a single output 

@@ -1,10 +1,10 @@
 from interfaces import Interface
-from logicgates import Nor
+from logicgates import Nor, And
 from components import Split
 from primitives import Cathode
-from mixins import InputSetMixin, InputResetMixin, OutputAMixin, OutputBMixin
+from mixins import InputSetMixin, InputResetMixin, InputJMixin, InputKMixin, InputClockMixin, OutputQ_Mixin, OutputQMixin
 
-class SRFlipFlop(Interface, InputSetMixin, InputResetMixin, OutputAMixin, OutputBMixin):
+class SRFlipFlop(Interface, InputSetMixin, InputResetMixin, OutputQ_Mixin, OutputQMixin):
     """
     The implementation of a SR (set / reset) flip flop 
     """
@@ -12,30 +12,81 @@ class SRFlipFlop(Interface, InputSetMixin, InputResetMixin, OutputAMixin, Output
         inputs = {}
         outputs = {}
 
-        x1 = Nor()
-        x2 = Nor()
+        n1 = Nor()
+        n2 = Nor()
 
-        inputs["set"] = x1.input_a
-        inputs["reset"] = x2.input_b
+        inputs["set"] = n1.input_a
+        inputs["reset"] = n2.input_b
 
-        output_a = Cathode()
-        output_b = Cathode()
+        output_q_ = Cathode()
+        output_q = Cathode()
 
-        x1_split = Split()
-        x2_split = Split()
+        n1_split = Split()
+        n2_split = Split()
 
-        x1.output.connect(x1_split.input)
-        x1_split.connect(x2.input_a)
-        x1_split.connect(output_a)
+        n1.output.connect(n1_split.input)
+        n1_split.connect(n2.input_a)
+        n1_split.connect(output_q_)
 
-        x2.output.connect(x2_split.input)
-        x2_split.connect(x1.input_b)
-        x2_split.connect(output_b)
+        n2.output.connect(n2_split.input)
+        n2_split.connect(n1.input_b)
+        n2_split.connect(output_q)
         
-        outputs["output_a"] = output_a
-        outputs["output_b"] = output_b
+        outputs["output_q_"] = output_q_
+        outputs["output_q"] = output_q
 
         super(SRFlipFlop, self).__init__(inputs, outputs)
 
     def __str__(self):
         return "SRFlipFlop: " + super(SRFlipFlop, self).__str__()
+
+class JKFlipFlop(Interface, InputJMixin, InputKMixin, InputClockMixin, OutputQ_Mixin, OutputQMixin):
+    """
+    The implementation of a JK flip flop 
+    """
+    def __init__(self):
+        inputs = {}
+        outputs = {}
+
+        aj1 = And()
+        aj2 = And()
+        ak1 = And()
+        ak2 = And()
+        sr = SRFlipFlop()
+        clk_split = Split()
+        q_split = Split()
+        qsplit = Split()
+
+        #connect up the inputs
+        inputs["input_j"] = aj1.input_a
+        inputs["clock"] = clk_split.input
+        clk_split.connect(aj1.input_b)
+        clk_split.connect(ak1.input_a)
+        inputs["input_k"] = ak1.input_b
+
+        #connect the 2nd AND gates to the SR flip flop
+        aj1.output.connect(aj2.input_b)
+        ak1.output.connect(ak2.input_a)
+
+        aj2.output.connect(sr.set)
+        ak2.output.connect(sr.reset)
+
+        #connect up the sr outputs
+        output_q_ = Cathode()
+        output_q = Cathode()
+        
+        sr.output_q_.connect(q_split.input)
+        q_split.connect(aj2.input_a)
+        q_split.connect(output_q_)
+
+        sr.output_q.connect(qsplit.input)
+        qsplit.connect(ak2.input_b)
+        qsplit.connect(output_q)
+
+        outputs["output_q_"] = output_q_
+        outputs["output_q"] = output_q
+
+        super(JKFlipFlop, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "JKFlipFlop: " + super(JKFlipFlop, self).__str__()
