@@ -188,7 +188,6 @@ class SixteenBitMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixi
     def __str__(self):
         return "Sixteen Bit Memory: " + super(SixteenBitMemory, self).__str__()
 
-
 class SixteenByteMemory(Interface, InputAddressFourBitMixin, InputWriteEnableMixin, InputReadEnableMixin, InputDataInEightBitMixin, OutputDataOutEightBitMixin):
     
     def __init__(self):

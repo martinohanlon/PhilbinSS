@@ -318,15 +318,27 @@ An Xor gate is create by connecting And, Or and Not gates together.
     p2.on()
     print(output)
 
-`Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
+Links
+==========
 
- * images from `Crash Course Computer Science`_
+The following sites have been really useful in providing background information, tutorials and images.
+
+`Crash Course Computer Science`_
+`www.electronics-tutorials.ws`_
+`electronics.stackexchange.com`_
+`www.allaboutcircuits.com`_
+
+`Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
 
 .. _Martin O'Hanlon: https://github.com/martinohanlon
 .. _stuffaboutco.de: http://stuffaboutco.de
 .. _@martinohanlon: https://twitter.com/martinohanlon
-.. _Crash Course Computer Science: https://www.youtube.com/watch?v=tpIctyqH29Q&list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo
 .. _Carrie Anne Philbin: https://twitter.com/MissPhilbin 
+
+.. _Crash Course Computer Science: https://www.youtube.com/watch?v=tpIctyqH29Q&list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo
+.. _www.electronics-tutorials.ws: http://www.electronics-tutorials.ws
+.. _electronics.stackexchange.com: https://electronics.stackexchange.com
+.. _www.allaboutcircuits.com: https://www.allaboutcircuits.com/
 
 .. |andlogicgate| image:: docs/images/and.png
    :alt: and logic gate
