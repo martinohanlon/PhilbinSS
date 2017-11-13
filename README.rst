@@ -320,10 +320,10 @@ An Xor gate is create by connecting And, Or and Not gates together.
     p2.on()
     print(output)
 
-Links
-==========
+Acknowledgements
+================
 
-The following sites have been really useful in providing background information, tutorials and images.
+The following resources have been really useful in providing background information, tutorials and images.
 
 `Crash Course Computer Science`_
 
