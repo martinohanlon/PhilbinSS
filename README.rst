@@ -32,6 +32,8 @@ The current highest level of abstraction is ``ALU`` or ``16 byte memory storage 
 
 The project is named after the host of the show `Carrie Anne Philbin`_.
 
+`Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
+
 Components
 ==========
 
@@ -330,8 +332,6 @@ The following sites have been really useful in providing background information,
 `electronics.stackexchange.com`_
 
 `www.allaboutcircuits.com`_
-
-`Martin O'Hanlon`_ `stuffaboutco.de`_ `@martinohanlon`_
 
 .. _Martin O'Hanlon: https://github.com/martinohanlon
 .. _stuffaboutco.de: http://stuffaboutco.de
