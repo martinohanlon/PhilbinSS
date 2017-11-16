@@ -1,8 +1,9 @@
 from interfaces import Interface
 from logicgates import And, Xor, Or
-from components import Split, Power
+from components import Split, Power, MultiPower
 from primitives import Cathode
-from mixins import InputAMixin, InputBMixin, InputCMixin, InputOperatorMixin, OutputSumMixin, OutputCarryMixin, InputAEightBitMixin, InputBEightBitMixin, OutputSumEightBitMixin, OutputCarryMixin
+from flipflops import JKFlipFlop
+from mixins import InputAMixin, InputBMixin, InputCMixin, InputOperatorMixin, OutputSumMixin, OutputCarryMixin, InputAEightBitMixin, InputBEightBitMixin, OutputSumEightBitMixin, OutputCarryMixin, InputClockMixin, OutputEightBitMixin
 
 class HalfAdder(Interface, InputAMixin, InputBMixin, OutputSumMixin, OutputCarryMixin):
     def __init__(self):
@@ -222,3 +223,40 @@ class ALU(Interface, InputAEightBitMixin, InputBEightBitMixin, InputOperatorMixi
 
     def __str__(self):
         return "ALU: inputs = {{input_a = {}, input_b = {}, operator = {}}}, outputs = {{sum = {}, carry = {}, overflow = {}, negative = {}}}".format(self.input_a, self.input_b, self.operator, self.sum, self.carry, self.overflow, self.negative)
+
+class EightBitRippleCounter(Interface, InputClockMixin, OutputEightBitMixin):
+    def __init__(self):
+        inputs = {}
+        outputs = {}
+
+        power = MultiPower()
+        power.on()
+
+        # create jks and output cathodes
+        jks = []            
+        output_cathodes = []
+        for i in range(8):
+            # create jk
+            jk = JKFlipFlop()
+            jks.append(jk)
+            # connect up flip flops J K to power
+            power.connect(jk.input_j)
+            #power.connect(jk.input_k)
+            #create output cathode
+            output_cathodes.append(Cathode())
+
+        # connect up q's to output and next jk's clock
+        for i in range(0,7):
+            q_split = Split(jks[i + 1].clock, output_cathodes[i])
+            jks[i].output_q.connect(q_split.input)
+
+        # connect up final jk
+        jks[7].output_q.connect(output_cathodes[7])
+
+        inputs["clock"] = jks[0].clock
+        outputs["output"] = output_cathodes
+
+        super(EightBitRippleCounter, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "EightBitRippleCounter: inputs = {{clock = {}}}, outputs = {{output = {}}}".format(self.clock, self.output)

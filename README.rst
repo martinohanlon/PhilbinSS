@@ -333,6 +333,8 @@ The following resources have been really useful in providing background informat
 
 `www.allaboutcircuits.com`_
 
+`www.falstad.com`_
+
 .. _Martin O'Hanlon: https://github.com/martinohanlon
 .. _stuffaboutco.de: http://stuffaboutco.de
 .. _@martinohanlon: https://twitter.com/martinohanlon
@@ -342,6 +344,7 @@ The following resources have been really useful in providing background informat
 .. _www.electronics-tutorials.ws: http://www.electronics-tutorials.ws
 .. _electronics.stackexchange.com: https://electronics.stackexchange.com
 .. _www.allaboutcircuits.com: https://www.allaboutcircuits.com/
+.. _www.falstad.com: http://www.falstad.com/circuit/e-counter8.html
 
 .. |andlogicgate| image:: docs/images/and.png
    :alt: and logic gate

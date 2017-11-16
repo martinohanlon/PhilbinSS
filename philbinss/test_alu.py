@@ -1,4 +1,4 @@
-from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder, EightBitRippleCarryAdderSubtractor, ALU
+from alu import HalfAdder, FullAdder, EightBitRippleCarryAdder, EightBitRippleCarryAdderSubtractor, ALU, EightBitRippleCounter
 from components import Power
 from random import randint
 
@@ -233,7 +233,21 @@ def test_alu():
                 assert alu.input_a.int_value + alu.input_b.int_value == alu.sum.int_value
                 assert not alu.overflow.value
                 assert not alu.negative.value
-                
+
+def test_eightbitripplecounter():
+    rc = EightBitRippleCounter()
+    clk = Power()
+    print(rc)
+    clk.connect(rc.clock)
+    clk.on()
+    print(rc)
+    clk.off()
+    print(rc)
+    clk.on()
+    print(rc)
+    
+    
+
 def run_tests():
     test_halfadder()
     test_fulladder()
@@ -242,5 +256,5 @@ def run_tests():
     test_alu()
 
     print("alu - all tests run")
-
-run_tests()
+test_eightbitripplecounter()
+#run_tests()

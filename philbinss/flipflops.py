@@ -1,8 +1,8 @@
 from interfaces import Interface
-from logicgates import Nor, And
+from logicgates import Nor, And, Not
 from components import Split
 from primitives import Cathode
-from mixins import InputSetMixin, InputResetMixin, InputJMixin, InputKMixin, InputClockMixin, OutputQ_Mixin, OutputQMixin
+from mixins import InputSetMixin, InputResetMixin, InputDMixin, InputJMixin, InputKMixin, InputClockMixin, OutputQ_Mixin, OutputQMixin
 
 class SRFlipFlop(Interface, InputSetMixin, InputResetMixin, OutputQ_Mixin, OutputQMixin):
     """
@@ -90,3 +90,39 @@ class JKFlipFlop(Interface, InputJMixin, InputKMixin, InputClockMixin, OutputQ_M
 
     def __str__(self):
         return "JKFlipFlop: " + super(JKFlipFlop, self).__str__()
+
+class DFlipFlop(Interface, InputDMixin, InputClockMixin, OutputQ_Mixin, OutputQMixin):
+    """
+    The implementation of a D flip flop 
+    """
+    def __init__(self):
+        inputs = {}
+        outputs = {}
+
+        n = Not()
+        a1 = And()
+        a2 = And()
+        sr = SRFlipFlop()
+        clk_split = Split()
+        d_split = Split()
+
+        #connect up the inputs
+        inputs["input_d"] = d_split.input
+        d_split.connect(n.input)
+        d_split.connect(a2.input_b)
+        n.output.connect(a1.input_a)
+
+        inputs["clock"] = clk_split.input
+        clk_split.connect(a1.input_b)
+        clk_split.connect(a2.input_a)
+
+        a1.output.connect(sr.set)
+        a2.output.connect(sr.reset)
+
+        outputs["output_q_"] = sr.output_q_
+        outputs["output_q"] = sr.output_q
+
+        super(DFlipFlop, self).__init__(inputs, outputs)
+
+    def __str__(self):
+        return "DFlipFlop: " + super(DFlipFlop, self).__str__()

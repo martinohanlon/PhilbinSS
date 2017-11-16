@@ -1,5 +1,5 @@
 from components import Power
-from flipflops import SRFlipFlop, JKFlipFlop
+from flipflops import SRFlipFlop, JKFlipFlop, DFlipFlop
 
 def test_srflipflop():
     p_set = Power()
@@ -84,9 +84,44 @@ def test_jkflipflop():
     assert jk.output_q_.value
     assert not jk.output_q.value
 
+def test_dflipflop():
+    p_d = Power()
+    p_clk = Power()
+    d = DFlipFlop()
+
+    p_d.connect(d.input_d)
+    p_clk.connect(d.clock)
+
+    print(d)
+
+    p_d.on()
+
+    print(d)
+
+    p_clk.on()
+
+    print(d)
+
+    p_d.off()
+
+    print(d)
+
+    p_clk.off()
+
+    print(d)
+
+    p_clk.on()
+
+    print(d)
+
+    p_clk.off()
+
+    print(d)
+
 def run_tests():
     test_srflipflop()
     test_jkflipflop()
+    test_dflipflop()
     print("flipflops - all tests run")
 
 run_tests()
