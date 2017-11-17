@@ -92,31 +92,38 @@ def test_dflipflop():
     p_d.connect(d.input_d)
     p_clk.connect(d.clock)
 
-    print(d)
+    #clock is off, d is off
+    assert not d.output_q.value
+    assert d.output_q_.value
 
+    p_clk.on()
+    assert d.output_q.value
+    assert not d.output_q_.value
+
+    #turn d on, it should flip
     p_d.on()
+    assert not d.output_q.value
+    assert d.output_q_.value
 
-    print(d)
-
-    p_clk.on()
-
-    print(d)
-
+    #turn d off, it should flip
     p_d.off()
+    assert d.output_q.value
+    assert not d.output_q_.value
 
-    print(d)
+    #turn d on, it should flip
+    p_d.on()
+    assert not d.output_q.value
+    assert d.output_q_.value
 
+    #turn clock off
     p_clk.off()
-
-    print(d)
-
-    p_clk.on()
-
-    print(d)
-
-    p_clk.off()
-
-    print(d)
+    assert not d.output_q.value
+    assert d.output_q_.value
+ 
+    #turning d on should do nothing
+    p_d.on()
+    assert not d.output_q.value
+    assert d.output_q_.value
 
 def run_tests():
     test_srflipflop()
