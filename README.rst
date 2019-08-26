@@ -28,7 +28,7 @@ Using these simple components you can create all the key elements of a computer 
   
             * and so on...  
 
-The current highest level of abstraction is ``ALU`` or ``16 byte memory storage matrix`` (depending on your point of view!).
+The current highest level of abstraction is ``ALU`` or ``16 byte memory storage matrix`` or ``Master Slave JK Flip Flop`` (depending on your point of view!).
 
 The project is named after the host of the show `Carrie Anne Philbin`_.
 

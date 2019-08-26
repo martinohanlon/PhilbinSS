@@ -62,6 +62,7 @@ def run_tests():
     test_and()
     test_xor()
     test_nor()
+    test_nand()
     print("logicgates - all tests run")
     
 run_tests()

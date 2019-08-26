@@ -99,7 +99,7 @@ class Nand(Interface, InputAMixin, InputBMixin, OutputMixin):
         inputs["input_a"] = a.input_a
         inputs["input_b"] = a.input_b
         
-        o.output.connect(n.input)
+        a.output.connect(n.input)
         
         outputs = {}
         outputs["output"] = n.output

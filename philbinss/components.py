@@ -98,6 +98,9 @@ class Power(Anode):
     def __str__(self):
         return "Power: {}".format(self.value)
 
+    def toggle(self):
+        self.value = not self.value
+
 class MultiPower(Split):
     """
     A MultiPower is a Split connected up to Anode, it can acceptable multiple connections 
